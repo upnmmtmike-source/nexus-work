@@ -1,0 +1,1785 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEXUS-Work | Panel Principal & Red Social Profesional</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            nexus: {
+              blue: '#0A66C2',       /* Azul corporativo formal */
+              blueHover: '#084E96',
+              cyan: '#00D2FF',       /* Cian neón del isotipo NEXUS */
+              cyanHover: '#00B4DB',
+              bgLight: '#F8FAFC',    /* Fondo principal descansado */
+              dark: '#0F172A',
+              border: '#E2E8F0'
+            }
+          },
+          boxShadow: {
+            subtle: '0 4px 20px -2px rgba(10, 102, 194, 0.06)',
+            cardHover: '0 12px 30px -5px rgba(15, 23, 42, 0.08)',
+            activeGlow: '0 0 15px rgba(0, 210, 255, 0.35)'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Estilos de barra de desplazamiento suave */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F1F5F9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #CBD5E1;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #0A66C2;
+    }
+
+    /* Opciones WCAG 2.1 AA de accesibilidad (RNF-17) */
+    body.high-contrast {
+      background-color: #FFFFFF !important;
+      color: #000000 !important;
+    }
+    body.high-contrast .bg-white,
+    body.high-contrast .bg-slate-50,
+    body.high-contrast .bg-slate-100,
+    body.high-contrast .bg-slate-900 {
+      background-color: #FFFFFF !important;
+      border-color: #000000 !important;
+      color: #000000 !important;
+    }
+    body.high-contrast button, 
+    body.high-contrast input, 
+    body.high-contrast select {
+      border: 2px solid #000000 !important;
+      color: #000000 !important;
+    }
+    body.high-contrast .text-slate-400,
+    body.high-contrast .text-slate-500,
+    body.high-contrast .text-slate-600 {
+      color: #000000 !important;
+      font-weight: 600 !important;
+    }
+
+    /* Animación de entrada limpia para vistas de módulos */
+    .view-pane {
+      animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body id="app-body" class="bg-nexus-bgLight text-slate-800 font-sans antialiased selection:bg-nexus-cyan selection:text-slate-900 min-h-screen flex flex-col text-[15px]">
+
+  <!-- ==================== ACCESSIBILITY TOOLBAR (WCAG 2.1 AA / RNF-17) ==================== -->
+  <div id="accessibility-bar" class="bg-slate-900 text-slate-300 text-xs py-1 px-4 sm:px-8 flex justify-between items-center border-b border-slate-800 shrink-0">
+    <div class="flex items-center gap-2">
+      <i class="fa-solid fa-universal-access text-nexus-cyan text-sm"></i>
+      <span class="font-medium hidden sm:inline">Accesibilidad Universal e Inclusión (WCAG 2.1 AA • ODS 10)</span>
+      <span class="font-medium sm:hidden">Accesibilidad</span>
+    </div>
+    <div class="flex items-center gap-2 sm:gap-3">
+      <span class="text-slate-400 text-[11px] hidden md:inline">Tamaño:</span>
+      <button onclick="changeFontSize('large')" class="hover:text-nexus-cyan font-bold px-1.5 py-0.5 rounded text-xs bg-slate-800" title="Aumentar fuente">A+</button>
+      <button onclick="changeFontSize('normal')" class="hover:text-nexus-cyan font-bold px-1.5 py-0.5 rounded text-xs bg-slate-800" title="Fuente estándar">A</button>
+      <button onclick="changeFontSize('small')" class="hover:text-nexus-cyan font-bold px-1.5 py-0.5 rounded text-xs bg-slate-800" title="Disminuir fuente">A-</button>
+      <span class="text-slate-700">|</span>
+      <button onclick="toggleHighContrast()" class="hover:text-nexus-cyan px-2 py-0.5 rounded bg-slate-800 border border-slate-700 font-semibold text-[11px] flex items-center gap-1.5">
+        <i class="fas fa-adjust text-nexus-cyan"></i> Alto Contraste
+      </button>
+    </div>
+  </div>
+
+  <!-- ==================== APP HEADER / NAVBAR (RF-02) ==================== -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/90 shadow-sm shrink-0">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 sm:h-20 gap-3">
+        
+        <!-- Isotipo NEXUS-Work -->
+        <div class="flex items-center gap-4 shrink-0">
+          <a href="javascript:void(0)" onclick="navigateTo('feed')" class="flex items-center gap-2.5 group">
+            <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-nexus-cyan to-nexus-blue p-0.5 shadow-sm group-hover:scale-105 transition-transform">
+              <div class="w-full h-full bg-slate-900 rounded-[10px] flex items-center justify-center">
+                <span class="text-nexus-cyan font-extrabold text-lg sm:text-xl tracking-tighter">N</span>
+              </div>
+            </div>
+            <div class="hidden xl:block">
+              <span class="text-xl font-extrabold tracking-tight text-slate-900">NEXUS<span class="text-nexus-blue">-Work</span></span>
+              <span class="block text-[9px] uppercase tracking-widest text-slate-500 font-bold">Plataforma Profesional</span>
+            </div>
+          </a>
+
+          <!-- Buscador Global Universal (RF-02) -->
+          <div class="relative w-44 sm:w-64 md:w-72 lg:w-80">
+            <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs pointer-events-none"></i>
+            <input type="text" id="global-search" oninput="handleUniversalSearch(this.value)" placeholder="Buscar profesionales, vacantes o eventos..." 
+              class="w-full bg-slate-100 hover:bg-slate-50 focus:bg-white text-slate-800 text-xs rounded-xl pl-9 pr-3 py-2 border border-slate-200 focus:outline-none focus:border-nexus-blue transition-all font-medium">
+            <div id="search-dropdown" class="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl border border-slate-200 shadow-2xl p-2 hidden z-50"></div>
+          </div>
+        </div>
+
+        <!-- Navegación Primaria por Pestañas (Arquitectura de Información - Término 20) -->
+        <nav class="flex items-center space-x-1 sm:space-x-2">
+          
+          <button onclick="navigateTo('feed')" id="nav-feed" class="nav-tab px-3 py-2 rounded-xl text-xs sm:text-sm font-bold flex flex-col sm:flex-row items-center gap-1 sm:gap-2 transition-all bg-blue-50 text-nexus-blue">
+            <i class="fas fa-newspaper text-base"></i>
+            <span class="hidden md:inline">Feed</span>
+          </button>
+
+          <button onclick="navigateTo('dashboard')" id="nav-dashboard" class="nav-tab px-3 py-2 rounded-xl text-xs sm:text-sm font-bold flex flex-col sm:flex-row items-center gap-1 sm:gap-2 transition-all text-slate-600 hover:bg-slate-100">
+            <i class="fas fa-chart-line text-base"></i>
+            <span class="hidden md:inline">Analíticas</span>
+          </button>
+
+          <button onclick="navigateTo('jobs')" id="nav-jobs" class="nav-tab px-3 py-2 rounded-xl text-xs sm:text-sm font-bold flex flex-col sm:flex-row items-center gap-1 sm:gap-2 transition-all text-slate-600 hover:bg-slate-100 relative">
+            <i class="fas fa-briefcase text-base"></i>
+            <span class="hidden md:inline">Empleos</span>
+            <span class="absolute top-1 right-1 w-2 h-2 bg-emerald-500 rounded-full"></span>
+          </button>
+
+          <button onclick="navigateTo('events')" id="nav-events" class="nav-tab px-3 py-2 rounded-xl text-xs sm:text-sm font-bold flex flex-col sm:flex-row items-center gap-1 sm:gap-2 transition-all text-slate-600 hover:bg-slate-100">
+            <i class="fas fa-qrcode text-base"></i>
+            <span class="hidden md:inline">Eventos QR</span>
+          </button>
+
+          <button onclick="navigateTo('chat')" id="nav-chat" class="nav-tab px-3 py-2 rounded-xl text-xs sm:text-sm font-bold flex flex-col sm:flex-row items-center gap-1 sm:gap-2 transition-all text-slate-600 hover:bg-slate-100 relative">
+            <i class="fas fa-comments text-base"></i>
+            <span class="hidden md:inline">Mensajes</span>
+            <span id="unread-chat-badge" class="w-2 h-2 bg-nexus-blue rounded-full"></span>
+          </button>
+
+          <button onclick="navigateTo('privacy')" id="nav-privacy" class="nav-tab px-3 py-2 rounded-xl text-xs sm:text-sm font-bold flex flex-col sm:flex-row items-center gap-1 sm:gap-2 transition-all text-slate-600 hover:bg-slate-100">
+            <i class="fas fa-shield-halved text-base"></i>
+            <span class="hidden md:inline">Privacidad</span>
+          </button>
+        </nav>
+
+        <!-- Avatar Usuario Activo: Carlos Mendoza (User Persona 1) -->
+        <div class="flex items-center gap-2 sm:gap-3 pl-2 border-l border-slate-200">
+          <div class="relative cursor-pointer" onclick="navigateTo('dashboard')" title="Ver mi perfil">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&q=80" 
+                 alt="Carlos Mendoza" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full object-cover ring-2 ring-nexus-blue/30 hover:ring-nexus-cyan transition-all">
+            <span class="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full"></span>
+          </div>
+          <div class="hidden lg:block text-left leading-tight">
+            <span class="block text-xs font-bold text-slate-900 truncate max-w-[110px]">Carlos Mendoza</span>
+            <span class="block text-[10px] text-emerald-600 font-semibold flex items-center gap-1">
+              <i class="fas fa-badge-check text-[10px]"></i> Verificado
+            </span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== BANNER CONTEXTUAL REGIONAL ==================== -->
+  <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-nexus-blue text-white py-2 px-4 text-xs">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <span class="px-2 py-0.5 rounded-full bg-nexus-cyan/20 border border-nexus-cyan/40 text-nexus-cyan font-bold text-[10px] uppercase tracking-wider">Región San Martín</span>
+        <span class="text-slate-200 text-[11px]">Conectado desde Tarapoto • Red activa con 1,280 colegas y 42 empresas locales</span>
+      </div>
+      <div class="flex items-center gap-3 text-[11px] text-slate-300">
+        <span><i class="fas fa-id-card-clip text-nexus-cyan mr-1"></i> Perfil completado: <strong>100%</strong></span>
+        <span class="hidden sm:inline">|</span>
+        <span class="hidden sm:inline"><i class="fas fa-bolt text-amber-400 mr-1"></i> Modo: <strong>Búsqueda Activa</strong></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== CONTENEDOR PRINCIPAL DINÁMICO ==================== -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-6">
+
+    <!-- ========================================================================= -->
+    <!-- MÓDULO 1: EL MURO O FEED PRINCIPAL (RF-07)                                -->
+    <!-- ========================================================================= -->
+    <div id="view-feed" class="view-pane grid grid-cols-1 lg:grid-cols-12 gap-6">
+      
+      <!-- Lateral Izquierda: Tarjeta de Identidad y Accesos Rápidos -->
+      <aside class="lg:col-span-3 space-y-5">
+        <div class="bg-white rounded-3xl border border-slate-200/90 p-5 shadow-sm text-center relative overflow-hidden">
+          <div class="h-16 -mx-5 -mt-5 bg-gradient-to-r from-nexus-blue to-slate-900 mb-4"></div>
+          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80" 
+               alt="Carlos Mendoza" class="w-16 h-16 rounded-2xl object-cover mx-auto ring-4 ring-white shadow-md -mt-12 mb-3">
+          
+          <h2 class="text-sm font-extrabold text-slate-900">Carlos Mendoza Silva</h2>
+          <p class="text-xs text-slate-500 font-medium mt-0.5">Ingeniero de Sistemas • Egresado</p>
+          <p class="text-[11px] text-slate-400 mt-1"><i class="fas fa-location-dot text-nexus-blue mr-1"></i> Tarapoto, San Martín, Perú</p>
+
+          <div class="mt-4 pt-4 border-t border-slate-100 grid grid-cols-2 gap-2 text-left">
+            <div class="p-2 rounded-xl bg-slate-50">
+              <span class="block text-[10px] text-slate-500 font-bold uppercase">Conexiones</span>
+              <span class="text-sm font-extrabold text-nexus-blue">142</span>
+            </div>
+            <div class="p-2 rounded-xl bg-slate-50">
+              <span class="block text-[10px] text-slate-500 font-bold uppercase">Vistas CV</span>
+              <span class="text-sm font-extrabold text-emerald-600">68</span>
+            </div>
+          </div>
+
+          <button onclick="navigateTo('dashboard')" class="mt-4 w-full py-2 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition-all flex items-center justify-center gap-1.5">
+            <i class="fas fa-user-circle text-nexus-blue"></i> Ver mi CV Digital
+          </button>
+        </div>
+
+        <!-- Filtros Rápidos de Relevancia del Feed -->
+        <div class="bg-white rounded-3xl border border-slate-200/90 p-4 shadow-sm">
+          <h3 class="text-xs font-extrabold text-slate-900 uppercase tracking-wider mb-3 flex items-center gap-2">
+            <i class="fas fa-filter text-nexus-blue"></i> Filtro de Relevancia
+          </h3>
+          <div class="space-y-1.5">
+            <button onclick="filterFeedPosts('all')" id="filter-all" class="feed-filter-btn w-full text-left px-3 py-2 rounded-xl text-xs font-bold bg-blue-50 text-nexus-blue flex items-center justify-between">
+              <span>Todo el Contenido</span>
+              <span class="text-[10px] bg-white text-nexus-blue px-2 py-0.5 rounded-full font-extrabold">3</span>
+            </button>
+            <button onclick="filterFeedPosts('regional')" id="filter-regional" class="feed-filter-btn w-full text-left px-3 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-50 flex items-center justify-between">
+              <span>San Martín / Local</span>
+              <span class="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full font-bold">2</span>
+            </button>
+            <button onclick="filterFeedPosts('empleos')" id="filter-empleos" class="feed-filter-btn w-full text-left px-3 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-50 flex items-center justify-between">
+              <span>Ofertas de Empleo</span>
+              <span class="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full font-bold">1</span>
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Columna Central: Editor de Publicaciones y Lista de Posts -->
+      <section class="lg:col-span-6 space-y-5">
+        
+        <!-- Caja Crear Publicación (RF-07 / RN-09) -->
+        <div class="bg-white rounded-3xl border border-slate-200/90 p-5 shadow-sm">
+          <div class="flex items-center gap-3">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80" 
+                 alt="Carlos Mendoza" class="w-10 h-10 rounded-full object-cover">
+            <button onclick="openCreatePostModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-500 font-medium text-xs text-left px-4 py-3 rounded-2xl border border-slate-200 transition-colors">
+              ¿Qué proyecto, logro o duda técnica deseas compartir hoy?
+            </button>
+          </div>
+          
+          <div class="mt-3 pt-3 border-t border-slate-100 flex items-center justify-around text-xs font-bold text-slate-600">
+            <button onclick="openCreatePostModal('image')" class="hover:text-nexus-blue p-2 rounded-xl hover:bg-blue-50 transition-colors flex items-center gap-2">
+              <i class="fas fa-image text-emerald-500 text-sm"></i>
+              <span class="hidden sm:inline">Foto / Certificado</span>
+            </button>
+            <button onclick="openCreatePostModal('event')" class="hover:text-nexus-blue p-2 rounded-xl hover:bg-blue-50 transition-colors flex items-center gap-2">
+              <i class="fas fa-calendar-check text-nexus-cyan text-sm"></i>
+              <span class="hidden sm:inline">Evento local</span>
+            </button>
+            <button onclick="openCreatePostModal('poll')" class="hover:text-nexus-blue p-2 rounded-xl hover:bg-blue-50 transition-colors flex items-center gap-2">
+              <i class="fas fa-square-poll-vertical text-amber-500 text-sm"></i>
+              <span class="hidden sm:inline">Encuesta</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Muro de Publicaciones Dinámico -->
+        <div id="posts-container" class="space-y-5">
+          <!-- Se inyectan o renderizan mediante JavaScript -->
+        </div>
+
+      </section>
+
+      <!-- Lateral Derecha: Recomendaciones IA (RF-09) & Enlaces Locales -->
+      <aside class="lg:col-span-3 space-y-5">
+        
+        <!-- Tarjeta Motor de Recomendaciones con Match % (RF-09) -->
+        <div class="bg-white rounded-3xl border border-slate-200/90 p-5 shadow-sm">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
+            <h3 class="text-xs font-extrabold text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
+              <i class="fas fa-wand-magic-sparkles text-nexus-blue"></i> Match Sugerido (IA)
+            </h3>
+            <span class="text-[10px] text-nexus-cyan font-bold bg-slate-900 px-2 py-0.5 rounded-full">RF-09</span>
+          </div>
+
+          <div class="space-y-3.5">
+            <!-- Sugerencia 1: Elena Ramos (RRHH) -->
+            <div class="flex items-start gap-3 p-2.5 rounded-2xl hover:bg-slate-50 border border-transparent hover:border-slate-100 transition-all">
+              <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=120&q=80" 
+                   alt="Elena Ramos" class="w-10 h-10 rounded-full object-cover shrink-0">
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between">
+                  <h4 class="text-xs font-bold text-slate-900 truncate">Elena Ramos</h4>
+                  <span class="text-[10px] font-extrabold text-emerald-600 bg-emerald-50 px-1.5 py-0.2 rounded">94%</span>
+                </div>
+                <p class="text-[11px] text-slate-500 truncate">Jefa RR.HH. • CacaoTech Perú</p>
+                <button onclick="handleConnectUser('Elena Ramos', this)" class="mt-2 w-full py-1 px-2.5 rounded-lg border border-nexus-blue text-nexus-blue hover:bg-nexus-blue hover:text-white text-[11px] font-bold transition-all">
+                  + Conectar
+                </button>
+              </div>
+            </div>
+
+            <!-- Sugerencia 2: Arq. Sofía Díaz -->
+            <div class="flex items-start gap-3 p-2.5 rounded-2xl hover:bg-slate-50 border border-transparent hover:border-slate-100 transition-all">
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80" 
+                   alt="Sofía Díaz" class="w-10 h-10 rounded-full object-cover shrink-0">
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between">
+                  <h4 class="text-xs font-bold text-slate-900 truncate">Sofía Díaz</h4>
+                  <span class="text-[10px] font-extrabold text-blue-600 bg-blue-50 px-1.5 py-0.2 rounded">88%</span>
+                </div>
+                <p class="text-[11px] text-slate-500 truncate">Diseño Gráfico & Proyectos</p>
+                <button onclick="handleConnectUser('Sofía Díaz', this)" class="mt-2 w-full py-1 px-2.5 rounded-lg border border-nexus-blue text-nexus-blue hover:bg-nexus-blue hover:text-white text-[11px] font-bold transition-all">
+                  + Conectar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Próximo Evento Destacado con Pase QR (RF-05) -->
+        <div class="bg-gradient-to-br from-slate-900 to-slate-800 rounded-3xl p-5 text-white shadow-md relative overflow-hidden">
+          <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-nexus-cyan/10 rounded-full blur-xl pointer-events-none"></div>
+          <span class="px-2 py-0.5 rounded-full bg-nexus-cyan/20 text-nexus-cyan font-bold text-[10px] uppercase tracking-wider">
+            Evento Confirmado
+          </span>
+          <h4 class="font-extrabold text-sm mt-2 text-white leading-tight">Summit de Innovación & Tech San Martín</h4>
+          <p class="text-[11px] text-slate-300 mt-1"><i class="far fa-calendar text-nexus-cyan mr-1"></i> 15 Nov, 2026 • Tarapoto</p>
+          <button onclick="openQrModal('Summit de Innovación & Tech San Martín', 'carlos.mendoza@upn.pe', 'SMP-2026-9812')" 
+                  class="mt-4 w-full py-2 px-3 rounded-xl bg-nexus-cyan text-slate-950 text-xs font-extrabold hover:bg-white transition-all flex items-center justify-center gap-2">
+            <i class="fas fa-qrcode"></i> Ver mi Boleto QR
+          </button>
+        </div>
+
+      </aside>
+
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- MÓDULO 2: EL DASHBOARD ANALÍTICO PERSONAL (RF-11 / POV CARLOS)             -->
+    <!-- ========================================================================= -->
+    <div id="view-dashboard" class="view-pane hidden space-y-6">
+      
+      <!-- Encabezado de métricas -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 bg-white p-6 rounded-3xl border border-slate-200/90 shadow-sm">
+        <div>
+          <span class="text-xs font-bold text-nexus-blue uppercase tracking-wider">Métricas de Tracción Semanal (RF-11)</span>
+          <h2 class="text-2xl font-extrabold text-slate-900 mt-0.5">Analíticas de Tu Perfil Profesional</h2>
+          <p class="text-xs text-slate-500 mt-1">Conoce cómo interactúan los reclutadores y colegas de la región con tu CV digital.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-xs text-slate-500 font-semibold">Semana:</span>
+          <span class="px-3 py-1.5 rounded-xl bg-slate-100 text-slate-800 text-xs font-bold border border-slate-200">
+            27 Oct - 03 Nov 2026
+          </span>
+        </div>
+      </div>
+
+      <!-- 4 Tarjetas de Métricas Clave -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        
+        <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-500">Visitas al Perfil</span>
+            <div class="w-8 h-8 rounded-xl bg-blue-50 text-nexus-blue flex items-center justify-center text-sm">
+              <i class="fas fa-eye"></i>
+            </div>
+          </div>
+          <div class="text-3xl font-extrabold text-slate-900 mt-2">128</div>
+          <div class="text-[11px] text-emerald-600 font-bold mt-1 flex items-center gap-1">
+            <i class="fas fa-arrow-up"></i> +24% vs semana previa
+          </div>
+        </div>
+
+        <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-500">Impresiones Post</span>
+            <div class="w-8 h-8 rounded-xl bg-cyan-50 text-nexus-cyan flex items-center justify-center text-sm">
+              <i class="fas fa-chart-simple"></i>
+            </div>
+          </div>
+          <div class="text-3xl font-extrabold text-slate-900 mt-2">1,490</div>
+          <div class="text-[11px] text-emerald-600 font-bold mt-1 flex items-center gap-1">
+            <i class="fas fa-arrow-up"></i> +38% alcance local
+          </div>
+        </div>
+
+        <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-500">Clics en CV Digital</span>
+            <div class="w-8 h-8 rounded-xl bg-amber-50 text-amber-500 flex items-center justify-center text-sm">
+              <i class="fas fa-file-pdf"></i>
+            </div>
+          </div>
+          <div class="text-3xl font-extrabold text-slate-900 mt-2">42</div>
+          <div class="text-[11px] text-emerald-600 font-bold mt-1 flex items-center gap-1">
+            <i class="fas fa-arrow-up"></i> 8 reclutadores verificados
+          </div>
+        </div>
+
+        <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-500">Apariciones Búsqueda</span>
+            <div class="w-8 h-8 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-sm">
+              <i class="fas fa-magnifying-glass"></i>
+            </div>
+          </div>
+          <div class="text-3xl font-extrabold text-slate-900 mt-2">95</div>
+          <div class="text-[11px] text-slate-500 font-medium mt-1">Palabra: "React / Node.js"</div>
+        </div>
+
+      </div>
+
+      <!-- Gráfico Visual Semanal de Interacciones (SVG Interactivo) -->
+      <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h3 class="text-sm font-extrabold text-slate-900">Actividad e Interacciones Semanales</h3>
+            <p class="text-xs text-slate-500">Comportamiento del tráfico generado hacia tu perfil profesional</p>
+          </div>
+          <span class="text-xs font-bold text-nexus-blue bg-blue-50 px-3 py-1 rounded-xl">Tarapoto & San Martín</span>
+        </div>
+
+        <!-- Render de gráfico de barras simplificado -->
+        <div class="grid grid-cols-7 gap-2 sm:gap-4 h-48 items-end pt-6 pb-2 border-b border-slate-100">
+          
+          <div class="flex flex-col items-center gap-2 group cursor-pointer">
+            <span class="text-[10px] font-bold text-slate-500 group-hover:text-nexus-blue">14</span>
+            <div class="w-full bg-blue-100 rounded-t-xl transition-all group-hover:bg-nexus-blue" style="height: 40px;"></div>
+            <span class="text-[11px] font-semibold text-slate-500">Lun</span>
+          </div>
+
+          <div class="flex flex-col items-center gap-2 group cursor-pointer">
+            <span class="text-[10px] font-bold text-slate-500 group-hover:text-nexus-blue">22</span>
+            <div class="w-full bg-blue-100 rounded-t-xl transition-all group-hover:bg-nexus-blue" style="height: 65px;"></div>
+            <span class="text-[11px] font-semibold text-slate-500">Mar</span>
+          </div>
+
+          <div class="flex flex-col items-center gap-2 group cursor-pointer">
+            <span class="text-[10px] font-bold text-slate-500 group-hover:text-nexus-blue">18</span>
+            <div class="w-full bg-blue-100 rounded-t-xl transition-all group-hover:bg-nexus-blue" style="height: 52px;"></div>
+            <span class="text-[11px] font-semibold text-slate-500">Mié</span>
+          </div>
+
+          <div class="flex flex-col items-center gap-2 group cursor-pointer">
+            <span class="text-[10px] font-bold text-slate-500 group-hover:text-nexus-blue">36</span>
+            <div class="w-full bg-blue-200 rounded-t-xl transition-all group-hover:bg-nexus-blue" style="height: 110px;"></div>
+            <span class="text-[11px] font-semibold text-slate-500">Jue</span>
+          </div>
+
+          <div class="flex flex-col items-center gap-2 group cursor-pointer">
+            <span class="text-[10px] font-bold text-slate-500 group-hover:text-nexus-blue">48</span>
+            <div class="w-full bg-nexus-blue rounded-t-xl transition-all group-hover:bg-nexus-blueHover" style="height: 145px;"></div>
+            <span class="text-[11px] font-bold text-nexus-blue">Vie</span>
+          </div>
+
+          <div class="flex flex-col items-center gap-2 group cursor-pointer">
+            <span class="text-[10px] font-bold text-slate-500 group-hover:text-nexus-blue">28</span>
+            <div class="w-full bg-blue-100 rounded-t-xl transition-all group-hover:bg-nexus-blue" style="height: 80px;"></div>
+            <span class="text-[11px] font-semibold text-slate-500">Sáb</span>
+          </div>
+
+          <div class="flex flex-col items-center gap-2 group cursor-pointer">
+            <span class="text-[10px] font-bold text-slate-500 group-hover:text-nexus-blue">12</span>
+            <div class="w-full bg-blue-100 rounded-t-xl transition-all group-hover:bg-nexus-blue" style="height: 35px;"></div>
+            <span class="text-[11px] font-semibold text-slate-500">Dom</span>
+          </div>
+
+        </div>
+        <p class="text-[11px] text-slate-400 mt-3 text-right">Pico de interacción: Viernes con la publicación del proyecto de tesis.</p>
+      </div>
+
+      <!-- TRAZABILIDAD VISUAL DE POSTULACIONES (POV de Carlos Mendoza: Dashboard Semáforo) -->
+      <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-800 text-[11px] font-extrabold uppercase">
+              <i class="fas fa-traffic-light"></i> Dashboard Semáforo (Ideación Carlos)
+            </div>
+            <h3 class="text-base font-extrabold text-slate-900 mt-1">Trazabilidad de Mis Postulaciones en Vivo</h3>
+            <p class="text-xs text-slate-500">Transparencia total: sin incertidumbre sobre el estado de tu proceso.</p>
+          </div>
+          <button onclick="navigateTo('jobs')" class="text-xs font-bold text-nexus-blue hover:underline">
+            Explorar más vacantes →
+          </button>
+        </div>
+
+        <div id="applications-tracker-list" class="space-y-4">
+          <!-- Item 1: En Revisión (Amarillo) -->
+          <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50/70 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-bold text-slate-900">Desarrollador Full Stack Junior</span>
+                <span class="text-[10px] bg-blue-100 text-nexus-blue font-bold px-2 py-0.5 rounded-full">CacaoTech Perú</span>
+              </div>
+              <p class="text-xs text-slate-500 mt-1">Tarapoto, San Martín • Postulado hace 2 días</p>
+            </div>
+            
+            <div class="flex items-center gap-4">
+              <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-amber-500 animate-ping"></span>
+                <span class="text-xs font-bold text-amber-700 bg-amber-100 px-3 py-1 rounded-xl">En Revisión por RR.HH.</span>
+              </div>
+              <span class="text-[11px] text-slate-400">Match: 92%</span>
+            </div>
+          </div>
+
+          <!-- Item 2: Entrevista (Verde) -->
+          <div class="p-4 rounded-2xl border border-emerald-200 bg-emerald-50/40 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-bold text-slate-900">Practicante Profesional de Sistemas</span>
+                <span class="text-[10px] bg-slate-200 text-slate-800 font-bold px-2 py-0.5 rounded-full">Gobierno Regional San Martín</span>
+              </div>
+              <p class="text-xs text-slate-500 mt-1">Moyobamba / Híbrido • Postulado hace 5 días</p>
+            </div>
+            
+            <div class="flex items-center gap-4">
+              <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+                <span class="text-xs font-bold text-emerald-700 bg-emerald-100 px-3 py-1 rounded-xl">Entrevista Agendada (Jueves 10:00 AM)</span>
+              </div>
+              <span class="text-[11px] text-slate-400">Match: 86%</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- MÓDULO 3: BOLSA DE EMPLEO Y POSTULACIÓN (RF-08 / RN-06 / RN-10)            -->
+    <!-- ========================================================================= -->
+    <div id="view-jobs" class="view-pane hidden space-y-6">
+      
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+        <div>
+          <span class="text-xs font-bold text-nexus-blue uppercase tracking-wider">Oportunidades Laborales Verificadas (RF-08)</span>
+          <h2 class="text-2xl font-extrabold text-slate-900 mt-0.5">Bolsa de Empleo Regional & Remota</h2>
+          <p class="text-xs text-slate-500 mt-1">Postula en 1 clic utilizando directamente tu perfil validado de NEXUS-Work.</p>
+        </div>
+
+        <!-- Filtros Rápidos de Vacantes -->
+        <div class="flex flex-wrap items-center gap-2">
+          <select id="job-modality-filter" onchange="filterJobsList()" class="bg-slate-100 border border-slate-200 text-xs text-slate-800 font-bold px-3 py-2 rounded-xl focus:outline-none focus:border-nexus-blue">
+            <option value="all">Todas las Modalidades</option>
+            <option value="Presencial">Presencial (San Martín)</option>
+            <option value="Híbrido">Híbrido</option>
+            <option value="Remoto">Remoto Nacional</option>
+          </select>
+          <select id="job-area-filter" onchange="filterJobsList()" class="bg-slate-100 border border-slate-200 text-xs text-slate-800 font-bold px-3 py-2 rounded-xl focus:outline-none focus:border-nexus-blue">
+            <option value="all">Todas las Áreas</option>
+            <option value="Tecnología">Tecnología & Software</option>
+            <option value="Gestión">Gestión & RR.HH.</option>
+            <option value="Diseño">Diseño & Creatividad</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Listado de Empleos con Tarjetas de Match -->
+      <div id="jobs-container" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <!-- Renderizado dinámicamente con JS -->
+      </div>
+
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- MÓDULO 4: GESTIÓN DE EVENTOS Y ENTRADAS CON QR (RF-04 / RF-05 / RN-06)     -->
+    <!-- ========================================================================= -->
+    <div id="view-events" class="view-pane hidden space-y-6">
+      
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+        <div>
+          <span class="text-xs font-bold text-nexus-blue uppercase tracking-wider">Acreditación & Networking Presencial (RF-04 / RF-05)</span>
+          <h2 class="text-2xl font-extrabold text-slate-900 mt-0.5">Eventos & Conferencias Profesionales</h2>
+          <p class="text-xs text-slate-500 mt-1">Inscríbete en 1 clic y obtén tu pase digital seguro para control en puerta sin listas de papel.</p>
+        </div>
+
+        <button onclick="openCreateEventModal()" class="px-4 py-2.5 rounded-xl bg-nexus-blue hover:bg-nexus-blueHover text-white text-xs font-bold transition-all shadow-md flex items-center justify-center gap-2">
+          <i class="fas fa-plus-circle"></i> Organizar Nuevo Evento
+        </button>
+      </div>
+
+      <!-- Pestañas Internas de Eventos -->
+      <div class="flex gap-3 border-b border-slate-200 pb-2">
+        <button onclick="switchEventsTab('all')" id="tab-events-all" class="px-4 py-2 rounded-xl text-xs font-bold bg-nexus-blue text-white shadow-sm">
+          Eventos Disponibles en Región
+        </button>
+        <button onclick="switchEventsTab('my-tickets')" id="tab-events-tickets" class="px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200">
+          Mis Entradas & Pases QR Guardados (<span id="my-tickets-count">1</span>)
+        </button>
+      </div>
+
+      <!-- Contenedor 1: Explorar Eventos -->
+      <div id="events-explore-pane" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Inyectado por JS -->
+      </div>
+
+      <!-- Contenedor 2: Mis Entradas Guardadas con QR (RF-05) -->
+      <div id="events-tickets-pane" class="hidden space-y-5">
+        <div class="bg-blue-50/60 border border-blue-200 p-4 rounded-2xl flex items-center gap-3">
+          <i class="fas fa-qrcode text-nexus-blue text-2xl"></i>
+          <div>
+            <h4 class="text-xs font-extrabold text-slate-900">Tus Pases Digitales están listos para control en puerta</h4>
+            <p class="text-[11px] text-slate-600">Presenta el código QR desde tu celular al llegar a la sede o sincronízalo a tu Google Calendar.</p>
+          </div>
+        </div>
+
+        <div id="my-tickets-list" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <!-- Renderizado de tickets activos -->
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- MÓDULO 5: CHAT SÍNCRONO Y MENSAJERÍA PRIVADA (RF-06 / RN-04)               -->
+    <!-- ========================================================================= -->
+    <div id="view-chat" class="view-pane hidden">
+      
+      <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden grid grid-cols-1 md:grid-cols-12 min-h-[580px]">
+        
+        <!-- Lateral Izquierda: Contactos -->
+        <div class="md:col-span-4 border-r border-slate-200 flex flex-col">
+          <div class="p-4 border-b border-slate-200">
+            <div class="flex items-center justify-between mb-3">
+              <h3 class="text-sm font-extrabold text-slate-900">Mensajes Directos</h3>
+              <span class="text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full" id="daily-quota-badge">
+                Cupo diario: 18/20 (RN-04)
+              </span>
+            </div>
+            <div class="relative">
+              <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+              <input type="text" placeholder="Buscar conversación..." class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-8 pr-3 py-1.5 text-xs focus:outline-none focus:border-nexus-blue font-medium">
+            </div>
+          </div>
+
+          <!-- Lista de Contactos del Chat -->
+          <div class="overflow-y-auto flex-1 divide-y divide-slate-100" id="chat-contact-list">
+            
+            <button onclick="selectChatConversation('sofia')" id="contact-sofia" class="chat-contact-btn w-full p-3.5 text-left flex items-start gap-3 hover:bg-slate-50 transition-colors bg-blue-50/70">
+              <div class="relative shrink-0">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80" 
+                     alt="Sofía Díaz" class="w-11 h-11 rounded-full object-cover">
+                <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 border-2 border-white rounded-full"></span>
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between">
+                  <h4 class="text-xs font-bold text-slate-900 truncate">Arq. Sofía Díaz</h4>
+                  <span class="text-[10px] text-slate-400">11:42 AM</span>
+                </div>
+                <p class="text-[11px] text-slate-600 truncate mt-0.5" id="preview-sofia">¡Hola Carlos! Vi tu post de accesibilidad, genial...</p>
+                <span class="inline-flex items-center text-[9px] font-bold text-nexus-blue bg-blue-50 px-1.5 py-0.2 rounded mt-1">Conexión Verificada</span>
+              </div>
+            </button>
+
+            <button onclick="selectChatConversation('elena')" id="contact-elena" class="chat-contact-btn w-full p-3.5 text-left flex items-start gap-3 hover:bg-slate-50 transition-colors">
+              <div class="relative shrink-0">
+                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=120&q=80" 
+                     alt="Elena Ramos" class="w-11 h-11 rounded-full object-cover">
+                <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-slate-300 border-2 border-white rounded-full"></span>
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between">
+                  <h4 class="text-xs font-bold text-slate-900 truncate">Elena Ramos (RR.HH.)</h4>
+                  <span class="text-[10px] text-slate-400">Ayer</span>
+                </div>
+                <p class="text-[11px] text-slate-500 truncate mt-0.5">Tu perfil cumple los requisitos para la vacante junior...</p>
+                <span class="inline-flex items-center text-[9px] font-bold text-purple-700 bg-purple-50 px-1.5 py-0.2 rounded mt-1">CacaoTech Perú</span>
+              </div>
+            </button>
+
+          </div>
+        </div>
+
+        <!-- Área Central del Chat Activo -->
+        <div class="md:col-span-8 flex flex-col justify-between h-full bg-slate-50/50">
+          
+          <!-- Encabezado del Chat Seleccionado -->
+          <div class="p-4 bg-white border-b border-slate-200 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <img id="active-chat-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80" 
+                   alt="Usuario" class="w-10 h-10 rounded-full object-cover">
+              <div>
+                <h4 id="active-chat-name" class="text-xs font-extrabold text-slate-900">Arq. Sofía Díaz</h4>
+                <p id="active-chat-status" class="text-[11px] text-emerald-600 font-semibold flex items-center gap-1">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Activa ahora en Tarapoto
+                </p>
+              </div>
+            </div>
+            
+            <div class="flex items-center gap-2">
+              <button onclick="sendSimulatedCv()" title="Compartir mi CV Digital en PDF" class="px-3 py-1.5 rounded-xl border border-nexus-blue text-nexus-blue hover:bg-blue-50 text-xs font-bold flex items-center gap-1.5 transition-colors">
+                <i class="fas fa-paperclip"></i>
+                <span class="hidden sm:inline">Adjuntar CV</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Mensajes en Historial -->
+          <div id="chat-messages-container" class="p-4 overflow-y-auto space-y-3.5 flex-1 max-h-[380px]">
+            <!-- Inyectado por JS dinámicamente -->
+          </div>
+
+          <!-- Input de Envío de Mensaje -->
+          <div class="p-3 bg-white border-t border-slate-200">
+            <form onsubmit="handleSendChatMessage(event)" class="flex items-center gap-2">
+              <input type="text" id="chat-input" placeholder="Escribe un mensaje profesional claro..." required
+                     class="flex-1 bg-slate-100 text-xs text-slate-900 px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-nexus-blue font-medium">
+              <button type="submit" class="px-4 py-2.5 rounded-xl bg-nexus-blue hover:bg-nexus-blueHover text-white text-xs font-bold transition-all shadow-sm flex items-center gap-1.5">
+                <span>Enviar</span>
+                <i class="fas fa-paper-plane text-[10px]"></i>
+              </button>
+            </form>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- MÓDULO 6: CONFIGURACIÓN DE PRIVACIDAD Y SEGURIDAD (RNF-15 / RN-05)        -->
+    <!-- ========================================================================= -->
+    <div id="view-privacy" class="view-pane hidden space-y-6">
+      
+      <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-nexus-blue text-[11px] font-bold uppercase mb-2">
+          <i class="fas fa-shield-halved"></i> Privacidad y Control Granular (Término 19 / RNF-15)
+        </div>
+        <h2 class="text-2xl font-extrabold text-slate-900">Centro de Seguridad y Privacidad</h2>
+        <p class="text-xs text-slate-500 mt-1">Tú decides qué información compartes, quién ve tus búsquedas de empleo y cómo interactúa tu red.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <!-- Opciones de Búsqueda y Visibilidad -->
+        <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-6">
+          <h3 class="text-sm font-extrabold text-slate-900 border-b border-slate-100 pb-3 flex items-center gap-2">
+            <i class="fas fa-user-secret text-nexus-blue"></i> Visibilidad de Empleo & Perfil
+          </h3>
+
+          <!-- Switch 1: Modo Privado de Búsqueda -->
+          <div class="flex items-center justify-between gap-4">
+            <div>
+              <h4 class="text-xs font-bold text-slate-900">Modo Búsqueda Discreta de Empleo</h4>
+              <p class="text-[11px] text-slate-500">Oculta tus postulaciones y actividad laboral a contactos de tu empresa actual.</p>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" checked onchange="togglePrivacySetting('Modo Discreto', this.checked)" class="sr-only peer">
+              <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:after:w-5 after:w-5 after:transition-all peer-checked:bg-nexus-blue"></div>
+            </label>
+          </div>
+
+          <!-- Switch 2: Visibilidad de CV -->
+          <div class="flex items-center justify-between gap-4">
+            <div>
+              <h4 class="text-xs font-bold text-slate-900">Quién puede ver mi CV y Número</h4>
+              <p class="text-[11px] text-slate-500">Solo reclutadores e instituciones educativas formalmente verificadas.</p>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" checked onchange="togglePrivacySetting('Visibilidad CV a Verificados', this.checked)" class="sr-only peer">
+              <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:after:w-5 after:w-5 after:transition-all peer-checked:bg-nexus-blue"></div>
+            </label>
+          </div>
+
+          <!-- Switch 3: Indexación en buscadores externos -->
+          <div class="flex items-center justify-between gap-4">
+            <div>
+              <h4 class="text-xs font-bold text-slate-900">Aparecer en Motores de Búsqueda Públicos</h4>
+              <p class="text-[11px] text-slate-500">Permitir que tu enlace de perfil aparezca en búsquedas de Google.</p>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" onchange="togglePrivacySetting('Indexación Externa', this.checked)" class="sr-only peer">
+              <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:after:w-5 after:w-5 after:transition-all peer-checked:bg-nexus-blue"></div>
+            </label>
+          </div>
+
+        </div>
+
+        <!-- Gestión de Bloqueos y Descarga de Datos (RN-05 / RNF-15) -->
+        <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-6">
+          <h3 class="text-sm font-extrabold text-slate-900 border-b border-slate-100 pb-3 flex items-center gap-2">
+            <i class="fas fa-lock text-nexus-blue"></i> Moderación y Tus Datos Personales
+          </h3>
+
+          <div>
+            <h4 class="text-xs font-bold text-slate-900">Usuarios Bloqueados (RN-05)</h4>
+            <p class="text-[11px] text-slate-500 mb-3">Las cuentas bloqueadas pierden toda visibilidad de tus publicaciones y eventos.</p>
+            
+            <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs">
+              <div class="flex items-center gap-2">
+                <i class="fas fa-ban text-red-500"></i>
+                <span class="font-bold text-slate-800">Cuentas_Spam_Bot (Reportado)</span>
+              </div>
+              <button onclick="showToast('Usuario desbloqueado.', 'info')" class="text-[11px] font-bold text-slate-600 hover:text-nexus-blue">
+                Desbloquear
+              </button>
+            </div>
+          </div>
+
+          <div class="pt-4 border-t border-slate-100">
+            <h4 class="text-xs font-bold text-slate-900">Descarga de Información de Perfil</h4>
+            <p class="text-[11px] text-slate-500 mb-3">Obtén una copia íntegra en JSON o PDF de tu historial y certificaciones acumuladas.</p>
+            <button onclick="handleDownloadUserData()" class="py-2.5 px-4 rounded-xl border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-bold transition-all flex items-center gap-2">
+              <i class="fas fa-download text-nexus-blue"></i> Descargar Archivo Completo de Datos
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ==================== MODALES OPERATIVOS ==================== -->
+
+  <!-- Modal 1: Crear Publicación (RF-07) -->
+  <div id="modal-create-post" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+    <div class="bg-white p-6 sm:p-7 rounded-3xl border border-slate-200 max-w-lg w-full relative shadow-2xl">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+        <h3 class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
+          <i class="fas fa-pen-nib text-nexus-blue"></i> Crear Nueva Publicación
+        </h3>
+        <button onclick="closeModal('modal-create-post')" class="text-slate-400 hover:text-slate-700 p-1">
+          <i class="fas fa-times text-base"></i>
+        </button>
+      </div>
+
+      <form onsubmit="handlePublishPost(event)" class="space-y-4">
+        <div>
+          <textarea id="post-textarea" rows="4" required placeholder="Comparte una experiencia técnica, un empleo disponible o una recomendación para colegas en San Martín..." 
+                    class="w-full bg-slate-50 border border-slate-300 rounded-2xl p-3.5 text-xs text-slate-900 focus:outline-none focus:border-nexus-blue font-medium"></textarea>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-[10px] font-bold text-slate-600 mb-1">Categoría</label>
+            <select id="post-category" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:outline-none focus:border-nexus-blue">
+              <option value="regional">San Martín / Regional</option>
+              <option value="empleos">Oferta Laboral</option>
+              <option value="general">Tecnología & Aprendizaje</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-slate-600 mb-1">Visibilidad</label>
+            <select class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:outline-none focus:border-nexus-blue">
+              <option>Público en NEXUS-Work</option>
+              <option>Solo mis conexiones</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="pt-2 flex justify-end gap-2">
+          <button type="button" onclick="closeModal('modal-create-post')" class="px-4 py-2.5 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100">
+            Cancelar
+          </button>
+          <button type="submit" class="px-5 py-2.5 rounded-xl bg-nexus-blue hover:bg-nexus-blueHover text-white text-xs font-bold transition-all shadow-md">
+            Publicar en el Feed
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal 2: Boleto QR Digital (RF-05 / Ideación Elena & Carlos) -->
+  <div id="modal-qr-ticket" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+    <div class="bg-white p-6 sm:p-7 rounded-3xl border border-slate-200 max-w-sm w-full relative shadow-2xl text-center">
+      <button onclick="closeModal('modal-qr-ticket')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 p-1">
+        <i class="fas fa-times text-base"></i>
+      </button>
+
+      <div class="w-12 h-12 bg-blue-50 text-nexus-blue rounded-2xl mx-auto flex items-center justify-center text-xl mb-3 shadow-inner">
+        <i class="fas fa-ticket"></i>
+      </div>
+
+      <span class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold text-[10px] uppercase">
+        Acceso Verificado (RF-05)
+      </span>
+
+      <h3 id="ticket-modal-title" class="text-base font-extrabold text-slate-900 mt-2 leading-tight">Summit de Innovación & Tech</h3>
+      <p id="ticket-modal-user" class="text-xs text-slate-500 mt-0.5 font-medium">Carlos Mendoza (carlos.mendoza@upn.pe)</p>
+      
+      <!-- Render de Código QR dinámico SVG -->
+      <div class="my-5 p-4 bg-slate-900 rounded-3xl inline-block shadow-lg border-4 border-nexus-cyan/40">
+        <svg id="qr-svg-code" class="w-40 h-40" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Patrón simulado de QR dinámico seguro -->
+          <rect width="100" height="100" fill="#0F172A"/>
+          <!-- Posicionadores Esquinas -->
+          <rect x="5" y="5" width="28" height="28" rx="4" fill="#00D2FF"/>
+          <rect x="9" y="9" width="20" height="20" rx="2" fill="#0F172A"/>
+          <rect x="13" y="13" width="12" height="12" fill="#00D2FF"/>
+
+          <rect x="67" y="5" width="28" height="28" rx="4" fill="#00D2FF"/>
+          <rect x="71" y="9" width="20" height="20" rx="2" fill="#0F172A"/>
+          <rect x="75" y="13" width="12" height="12" fill="#00D2FF"/>
+
+          <rect x="5" y="67" width="28" height="28" rx="4" fill="#00D2FF"/>
+          <rect x="9" y="71" width="20" height="20" rx="2" fill="#0F172A"/>
+          <rect x="13" y="75" width="12" height="12" fill="#00D2FF"/>
+          <!-- Bloques de datos -->
+          <rect x="40" y="8" width="6" height="6" fill="#FFFFFF"/>
+          <rect x="52" y="14" width="6" height="6" fill="#00D2FF"/>
+          <rect x="40" y="24" width="8" height="8" fill="#FFFFFF"/>
+          <rect x="40" y="40" width="20" height="20" rx="3" fill="#0A66C2"/>
+          <rect x="46" y="46" width="8" height="8" fill="#FFFFFF"/>
+          <rect x="8" y="42" width="6" height="14" fill="#FFFFFF"/>
+          <rect x="22" y="48" width="8" height="6" fill="#00D2FF"/>
+          <rect x="70" y="42" width="12" height="6" fill="#FFFFFF"/>
+          <rect x="84" y="54" width="8" height="12" fill="#00D2FF"/>
+          <rect x="42" y="70" width="14" height="6" fill="#FFFFFF"/>
+          <rect x="62" y="72" width="10" height="10" fill="#00D2FF"/>
+          <rect x="42" y="84" width="10" height="8" fill="#FFFFFF"/>
+          <rect x="78" y="82" width="14" height="10" fill="#FFFFFF"/>
+        </svg>
+      </div>
+
+      <div class="text-[11px] text-slate-500 font-mono bg-slate-100 py-1.5 px-3 rounded-xl mb-4">
+        ID: <span id="ticket-modal-code" class="font-bold text-slate-900">SMP-2026-9812</span>
+      </div>
+
+      <div class="grid grid-cols-2 gap-2">
+        <button onclick="handleSyncCalendar()" class="py-2.5 px-3 rounded-xl border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-bold transition-all flex items-center justify-center gap-1.5">
+          <i class="far fa-calendar-plus text-nexus-blue"></i>
+          <span>Agendar (RF-12)</span>
+        </button>
+        <button onclick="handleDownloadTicketQr()" class="py-2.5 px-3 rounded-xl bg-nexus-blue hover:bg-nexus-blueHover text-white text-xs font-bold transition-all flex items-center justify-center gap-1.5 shadow-sm">
+          <i class="fas fa-download"></i>
+          <span>Guardar QR</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 3: Confirmación de Postulación Rápida (RF-08) -->
+  <div id="modal-apply-job" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+    <div class="bg-white p-6 sm:p-7 rounded-3xl border border-slate-200 max-w-md w-full relative shadow-2xl">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+        <h3 class="text-sm font-extrabold text-slate-900">Confirmar Postulación en 1 Clic</h3>
+        <button onclick="closeModal('modal-apply-job')" class="text-slate-400 hover:text-slate-700 p-1">
+          <i class="fas fa-times text-base"></i>
+        </button>
+      </div>
+
+      <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-200 mb-4">
+        <h4 id="apply-job-title" class="text-xs font-bold text-slate-900">Puesto</h4>
+        <p id="apply-job-company" class="text-[11px] text-nexus-blue font-semibold">Empresa</p>
+      </div>
+
+      <div class="space-y-3 mb-5 text-xs text-slate-600">
+        <div class="flex items-center gap-2">
+          <i class="fas fa-check-circle text-emerald-500"></i>
+          <span>Perfil validado con 100% de antecedentes académicos (UPN).</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <i class="fas fa-check-circle text-emerald-500"></i>
+          <span>CV estructurado adjunto en formato digital seguro.</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <i class="fas fa-bell text-nexus-blue"></i>
+          <span>Recibirás avisos de trazabilidad semafórica si el estado cambia.</span>
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-2">
+        <button onclick="closeModal('modal-apply-job')" class="px-4 py-2.5 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100">
+          Cancelar
+        </button>
+        <button onclick="confirmJobApplication()" class="px-5 py-2.5 rounded-xl bg-nexus-blue hover:bg-nexus-blueHover text-white text-xs font-bold transition-all shadow-md">
+          Enviar Candidatura Directa →
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Hub (Término 3 / Feedback Inmediato) -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- ==================== JAVASCRIPT: LÓGICA INTEGRAL DE LA APP ==================== -->
+  <script>
+    /* =========================================================================
+       ESTADO CENTRAL DE LA APLICACIÓN (STATE)
+       ========================================================================= */
+    const appState = {
+      activeTab: 'feed',
+      user: {
+        name: 'Carlos Mendoza Silva',
+        email: 'carlos.mendoza@upn.pe',
+        role: 'Ingeniero de Sistemas Egresado',
+        location: 'Tarapoto, San Martín, Perú',
+        connections: 142,
+        messagesQuotaToday: 18 // RN-04: Límite de 20 mensajes diarios para evitar spam
+      },
+      posts: [
+        {
+          id: 1,
+          author: 'Arq. Sofía Díaz',
+          avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80',
+          title: 'Diseñadora Urbana & Proyectos Sostenibles',
+          time: 'Hace 2 horas',
+          category: 'regional',
+          content: 'Culminamos con éxito el prototipo de accesibilidad digital y señalética para los espacios de coworking en Tarapoto. Recuerden que diseñar pensando en todas las personas (WCAG 2.1) no es un extra, ¡es una responsabilidad!',
+          likes: 24,
+          liked: false,
+          comments: [
+            { author: 'Carlos Mendoza', text: '¡Excelente enfoque inclusivo Sofía! Justo lo estamos integrando en NEXUS.' }
+          ]
+        },
+        {
+          id: 2,
+          author: 'Elena Ramos',
+          avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=120&q=80',
+          title: 'Jefa de RR.HH. en CacaoTech Perú',
+          time: 'Hace 5 horas',
+          category: 'empleos',
+          content: '¡Abrimos 2 vacantes para egresados de Ingeniería de Sistemas en Tarapoto! Buscamos talento con ganas de aprender arquitecturas modernas (Node.js, Tailwind y Git). Postulaciones abiertas con perfil verificado en la pestaña de Empleos.',
+          likes: 56,
+          liked: true,
+          comments: []
+        },
+        {
+          id: 3,
+          author: 'Comunidad Tech San Martín',
+          avatar: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=120&q=80',
+          title: 'Innovación & Desarrollo Regional',
+          time: 'Ayer a las 4:30 PM',
+          category: 'general',
+          content: '¿Cuál consideras que es la habilidad técnica con mayor proyección laboral en nuestra región este año? ¡Participa en el sondeo oficial para el Summit de Noviembre!',
+          likes: 41,
+          liked: false,
+          comments: []
+        }
+      ],
+      jobs: [
+        {
+          id: 'job-1',
+          title: 'Desarrollador Web Full Stack Junior',
+          company: 'CacaoTech Perú',
+          location: 'Tarapoto (Presencial)',
+          type: 'Tiempo Completo',
+          modality: 'Presencial',
+          area: 'Tecnología',
+          salary: 'S/ 2,800 - S/ 3,500',
+          match: '92%',
+          applied: true,
+          description: 'Desarrollo de módulos interactivos web, mantenimiento de APIs REST y maquetación responsiva accesible.'
+        },
+        {
+          id: 'job-2',
+          title: 'Practicante Profesional de Sistemas & TI',
+          company: 'Gobierno Regional San Martín',
+          location: 'Moyobamba / Tarapoto',
+          type: 'Prácticas Profesionales',
+          modality: 'Híbrido',
+          area: 'Tecnología',
+          salary: 'S/ 1,400 + Seguro',
+          match: '86%',
+          applied: true,
+          description: 'Soporte a plataformas de gestión documental, automatización de scripts y auditorías de seguridad informática.'
+        },
+        {
+          id: 'job-3',
+          title: 'Asistente de Marketing Digital & Contenidos',
+          company: 'Agencia Selva Creativa',
+          location: 'Remoto Nacional',
+          type: 'Freelance / Medio Tiempo',
+          modality: 'Remoto',
+          area: 'Diseño',
+          salary: 'S/ 1,800',
+          match: '78%',
+          applied: false,
+          description: 'Creación de piezas gráficas para redes sociales corporativas, campañas de posicionamiento y analíticas.'
+        },
+        {
+          id: 'job-4',
+          title: 'Coordinador de Capacitación y Talento',
+          company: 'Cooperativa Agraria Norandino',
+          location: 'Tarapoto',
+          type: 'Tiempo Completo',
+          modality: 'Presencial',
+          area: 'Gestión',
+          salary: 'S/ 3,200',
+          match: '74%',
+          applied: false,
+          description: 'Organización de talleres institucionales, evaluación de desempeño y programas de retención laboral.'
+        }
+      ],
+      events: [
+        {
+          id: 'evt-1',
+          title: 'Summit de Innovación & Tech San Martín',
+          date: '15 Nov, 2026 • 09:00 AM',
+          location: 'Centro de Convenciones Tarapoto',
+          modality: 'Presencial',
+          organizer: 'Gobierno Regional & Red NEXUS',
+          registered: true,
+          ticketCode: 'SMP-2026-9812',
+          aforo: '185/200'
+        },
+        {
+          id: 'evt-2',
+          title: 'Taller: Marca Personal en Redes Profesionales',
+          date: '20 Nov, 2026 • 06:30 PM',
+          location: 'Vía Zoom / Sala Virtual NEXUS',
+          modality: 'Virtual',
+          organizer: 'Elena Ramos (CacaoTech)',
+          registered: false,
+          ticketCode: 'TLL-2026-4431',
+          aforo: '92/100'
+        },
+        {
+          id: 'evt-3',
+          title: 'Mesa Redonda: Empleabilidad Joven e IA',
+          date: '02 Dic, 2026 • 10:00 AM',
+          location: 'Auditorio UPN Tarapoto',
+          modality: 'Presencial',
+          organizer: 'Facultad de Ingeniería UPN',
+          registered: false,
+          ticketCode: 'UPN-2026-5510',
+          aforo: '140/150'
+        }
+      ],
+      chatMessages: {
+        sofia: [
+          { sender: 'them', text: '¡Hola Carlos! Vi tu publicación sobre el proyecto de IHC y accesibilidad WCAG. Muy interesante la propuesta de reducir la fatiga en el registro.' },
+          { sender: 'me', text: '¡Hola Sofía! Muchas gracias. El objetivo fue justamente simplificar los pasos para jóvenes y freelancers como nosotros.' },
+          { sender: 'them', text: '¿Vas a asistir al Summit en Tarapoto este 15 de Noviembre? Podríamos coordinar para el bloque de networking presencial.' }
+        ],
+        elena: [
+          { sender: 'them', text: 'Estimado Carlos, revisamos tu perfil verificado en NEXUS y tu match técnico en Full Stack es muy favorable.' },
+          { sender: 'me', text: 'Buenas tardes Elena, me entusiasma mucho la oportunidad en CacaoTech Perú.' }
+        ]
+      },
+      currentChatContact: 'sofia',
+      applyingJobId: null
+    };
+
+    /* =========================================================================
+       NAVEGACIÓN POR PESTAÑAS (SPA)
+       ========================================================================= */
+    function navigateTo(tabName) {
+      appState.activeTab = tabName;
+
+      // Ocultar todas las vistas
+      document.querySelectorAll('.view-pane').forEach(el => el.classList.add('hidden'));
+      
+      // Mostrar la vista seleccionada
+      const targetView = document.getElementById(`view-${tabName}`);
+      if (targetView) targetView.classList.remove('hidden');
+
+      // Actualizar estado de botones del Navbar
+      document.querySelectorAll('.nav-tab').forEach(btn => {
+        btn.classList.remove('bg-blue-50', 'text-nexus-blue');
+        btn.classList.add('text-slate-600');
+      });
+
+      const activeBtn = document.getElementById(`nav-${tabName}`);
+      if (activeBtn) {
+        activeBtn.classList.add('bg-blue-50', 'text-nexus-blue');
+        activeBtn.classList.remove('text-slate-600');
+      }
+
+      // Si entra a chat, marcar mensajes como leídos
+      if (tabName === 'chat') {
+        const badge = document.getElementById('unread-chat-badge');
+        if (badge) badge.classList.add('hidden');
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    /* =========================================================================
+       RENDERIZADO DEL FEED DE PUBLICACIONES (RF-07)
+       ========================================================================= */
+    function renderPosts(categoryFilter = 'all') {
+      const container = document.getElementById('posts-container');
+      if (!container) return;
+
+      const filtered = categoryFilter === 'all' 
+        ? appState.posts 
+        : appState.posts.filter(p => p.category === categoryFilter);
+
+      container.innerHTML = filtered.map(post => `
+        <article class="bg-white rounded-3xl border border-slate-200/90 p-5 shadow-sm space-y-3.5 hover:border-slate-300 transition-all">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <img src="${post.avatar}" alt="${post.author}" class="w-11 h-11 rounded-full object-cover ring-2 ring-slate-100">
+              <div>
+                <h4 class="text-xs font-extrabold text-slate-900">${post.author}</h4>
+                <p class="text-[11px] text-slate-500 font-medium">${post.title}</p>
+                <span class="text-[10px] text-slate-400"><i class="far fa-clock mr-1"></i>${post.time}</span>
+              </div>
+            </div>
+            
+            <div class="flex items-center gap-2">
+              <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full ${
+                post.category === 'empleos' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' :
+                post.category === 'regional' ? 'bg-blue-50 text-nexus-blue border border-blue-200' :
+                'bg-slate-100 text-slate-600'
+              }">${post.category.toUpperCase()}</span>
+              
+              <button onclick="reportPostPrompt(${post.id})" title="Reportar contenido inapropiado (RN-07 / RN-08)" class="text-slate-300 hover:text-red-500 p-1">
+                <i class="fas fa-flag text-xs"></i>
+              </button>
+            </div>
+          </div>
+
+          <p class="text-xs sm:text-[13px] text-slate-700 leading-relaxed font-normal">${post.content}</p>
+
+          <!-- Barra de Interacciones -->
+          <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-slate-600">
+            <button onclick="togglePostLike(${post.id})" class="flex items-center gap-1.5 py-1 px-2.5 rounded-xl transition-all ${
+              post.liked ? 'text-nexus-blue bg-blue-50' : 'hover:bg-slate-100'
+            }">
+              <i class="${post.liked ? 'fas' : 'far'} fa-thumbs-up text-sm"></i>
+              <span>${post.likes} Me Gusta</span>
+            </button>
+
+            <button onclick="toggleCommentsView(${post.id})" class="flex items-center gap-1.5 py-1 px-2.5 rounded-xl hover:bg-slate-100 transition-all">
+              <i class="far fa-comment-dots text-sm text-slate-500"></i>
+              <span>${post.comments.length} Comentarios</span>
+            </button>
+
+            <button onclick="sharePost(${post.id})" class="flex items-center gap-1.5 py-1 px-2.5 rounded-xl hover:bg-slate-100 transition-all">
+              <i class="far fa-share-from-square text-sm text-slate-500"></i>
+              <span class="hidden sm:inline">Compartir</span>
+            </button>
+          </div>
+
+          <!-- Caja de Comentarios Desplegable -->
+          <div id="comments-box-${post.id}" class="pt-2 border-t border-slate-100 space-y-2">
+            ${post.comments.map(c => `
+              <div class="p-2.5 rounded-2xl bg-slate-50 text-xs flex items-start gap-2 border border-slate-100">
+                <i class="fas fa-user-circle text-slate-400 mt-0.5"></i>
+                <div>
+                  <span class="font-extrabold text-slate-900 mr-1">${c.author}:</span>
+                  <span class="text-slate-600">${c.text}</span>
+                </div>
+              </div>
+            `).join('')}
+
+            <form onsubmit="handleAddComment(event, ${post.id})" class="flex gap-2 pt-1">
+              <input type="text" placeholder="Escribe un comentario profesional..." required
+                     class="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-xs text-slate-800 focus:outline-none focus:border-nexus-blue">
+              <button type="submit" class="px-3 py-1.5 rounded-xl bg-nexus-blue text-white text-xs font-bold hover:bg-nexus-blueHover transition-colors">
+                Publicar
+              </button>
+            </form>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    function filterFeedPosts(category) {
+      document.querySelectorAll('.feed-filter-btn').forEach(btn => {
+        btn.classList.remove('bg-blue-50', 'text-nexus-blue');
+        btn.classList.add('text-slate-600');
+      });
+      const active = document.getElementById(`filter-${category}`);
+      if (active) {
+        active.classList.add('bg-blue-50', 'text-nexus-blue');
+        active.classList.remove('text-slate-600');
+      }
+      renderPosts(category);
+    }
+
+    function togglePostLike(postId) {
+      const post = appState.posts.find(p => p.id === postId);
+      if (post) {
+        post.liked = !post.liked;
+        post.likes += post.liked ? 1 : -1;
+        renderPosts();
+        if (post.liked) showToast('¡Reacción registrada!', 'success');
+      }
+    }
+
+    function toggleCommentsView(postId) {
+      const box = document.getElementById(`comments-box-${postId}`);
+      if (box) box.classList.toggle('hidden');
+    }
+
+    function handleAddComment(e, postId) {
+      e.preventDefault();
+      const input = e.target.querySelector('input');
+      const val = input.value.trim();
+      if (!val) return;
+
+      const post = appState.posts.find(p => p.id === postId);
+      if (post) {
+        post.comments.push({
+          author: 'Carlos Mendoza',
+          text: val
+        });
+        input.value = '';
+        renderPosts();
+        showToast('Comentario publicado en el muro.', 'success');
+      }
+    }
+
+    function sharePost(postId) {
+      showToast('Enlace de la publicación copiado al portapapeles.', 'info');
+    }
+
+    function reportPostPrompt(postId) {
+      showToast('Publicación reportada. Tras 5 reportes será revisada (RN-07 / RN-08).', 'info');
+    }
+
+    function openCreatePostModal(type = 'text') {
+      const modal = document.getElementById('modal-create-post');
+      modal.classList.remove('hidden');
+    }
+
+    function handlePublishPost(e) {
+      e.preventDefault();
+      const textarea = document.getElementById('post-textarea');
+      const category = document.getElementById('post-category').value;
+      const content = textarea.value.trim();
+
+      if (!content) return;
+
+      const newPost = {
+        id: Date.now(),
+        author: 'Carlos Mendoza Silva',
+        avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&q=80',
+        title: 'Ingeniero de Sistemas • UPN Tarapoto',
+        time: 'Justo ahora',
+        category: category,
+        content: content,
+        likes: 1,
+        liked: true,
+        comments: []
+      };
+
+      appState.posts.unshift(newPost);
+      textarea.value = '';
+      closeModal('modal-create-post');
+      renderPosts();
+      showToast('¡Tu publicación está en el muro de San Martín!', 'success');
+    }
+
+    /* =========================================================================
+       RENDERIZADO DE BOLSA DE EMPLEO (RF-08)
+       ========================================================================= */
+    function renderJobs() {
+      const container = document.getElementById('jobs-container');
+      if (!container) return;
+
+      const modalityFilter = document.getElementById('job-modality-filter').value;
+      const areaFilter = document.getElementById('job-area-filter').value;
+
+      let filtered = appState.jobs;
+      if (modalityFilter !== 'all') filtered = filtered.filter(j => j.modality === modalityFilter);
+      if (areaFilter !== 'all') filtered = filtered.filter(j => j.area === areaFilter);
+
+      container.innerHTML = filtered.map(job => `
+        <div class="bg-white rounded-3xl border ${job.applied ? 'border-emerald-300 bg-emerald-50/20' : 'border-slate-200'} p-5 shadow-sm flex flex-col justify-between space-y-4 hover:shadow-cardHover transition-all">
+          <div>
+            <div class="flex items-start justify-between gap-3">
+              <div>
+                <span class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full ${job.applied ? 'bg-emerald-100 text-emerald-800' : 'bg-blue-50 text-nexus-blue'}">${job.area}</span>
+                <h3 class="text-sm font-extrabold text-slate-900 mt-1.5 leading-snug">${job.title}</h3>
+                <p class="text-xs font-bold text-slate-600">${job.company} • <span class="text-slate-400 font-medium">${job.location}</span></p>
+              </div>
+              <div class="text-right">
+                <span class="text-xs font-extrabold text-emerald-600 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-xl block">
+                  Match ${job.match}
+                </span>
+                <span class="text-[10px] text-slate-400 block mt-1">${job.type}</span>
+              </div>
+            </div>
+
+            <p class="text-xs text-slate-600 mt-3 line-clamp-2 leading-relaxed">${job.description}</p>
+            
+            <div class="mt-3 flex items-center justify-between text-xs pt-3 border-t border-slate-100 font-semibold text-slate-700">
+              <span><i class="fas fa-coins text-amber-500 mr-1.5"></i>${job.salary}</span>
+              <span class="text-slate-400 text-[11px]"><i class="far fa-clock mr-1"></i>Vigencia: 30 días (RN-10)</span>
+            </div>
+          </div>
+
+          <div>
+            ${job.applied ? `
+              <button disabled class="w-full py-2.5 rounded-xl bg-emerald-100 text-emerald-800 text-xs font-extrabold flex items-center justify-center gap-2 cursor-default">
+                <i class="fas fa-check-circle"></i> Postulación Enviada (En Revisión)
+              </button>
+            ` : `
+              <button onclick="promptJobApply('${job.id}')" class="w-full py-2.5 rounded-xl bg-nexus-blue hover:bg-nexus-blueHover text-white text-xs font-bold transition-all shadow-sm flex items-center justify-center gap-2">
+                <span>Postular con mi Perfil (1 clic)</span>
+                <i class="fas fa-arrow-right text-[10px]"></i>
+              </button>
+            `}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function filterJobsList() {
+      renderJobs();
+    }
+
+    function promptJobApply(jobId) {
+      const job = appState.jobs.find(j => j.id === jobId);
+      if (!job) return;
+
+      appState.applyingJobId = jobId;
+      document.getElementById('apply-job-title').textContent = job.title;
+      document.getElementById('apply-job-company').textContent = `${job.company} • ${job.location}`;
+      document.getElementById('modal-apply-job').classList.remove('hidden');
+    }
+
+    function confirmJobApplication() {
+      const job = appState.jobs.find(j => j.id === appState.applyingJobId);
+      if (job) {
+        job.applied = true;
+        closeModal('modal-apply-job');
+        renderJobs();
+        showToast(`¡Postulación enviada con éxito a ${job.company}!`, 'success');
+        
+        // Agregar al panel semáforo de Carlos Mendoza
+        const tracker = document.getElementById('applications-tracker-list');
+        if (tracker) {
+          const item = document.createElement('div');
+          item.className = "p-4 rounded-2xl border border-slate-200 bg-slate-50/70 flex flex-col md:flex-row md:items-center justify-between gap-4";
+          item.innerHTML = `
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-bold text-slate-900">${job.title}</span>
+                <span class="text-[10px] bg-blue-100 text-nexus-blue font-bold px-2 py-0.5 rounded-full">${job.company}</span>
+              </div>
+              <p class="text-xs text-slate-500 mt-1">${job.location} • Postulado hoy</p>
+            </div>
+            <div class="flex items-center gap-4">
+              <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-amber-500 animate-ping"></span>
+                <span class="text-xs font-bold text-amber-700 bg-amber-100 px-3 py-1 rounded-xl">Recibido / En Revisión</span>
+              </div>
+              <span class="text-[11px] text-slate-400">Match: ${job.match}</span>
+            </div>
+          `;
+          tracker.prepend(item);
+        }
+      }
+    }
+
+    /* =========================================================================
+       RENDERIZADO DE EVENTOS Y ENTRADAS QR (RF-04 / RF-05)
+       ========================================================================= */
+    function renderEvents() {
+      const explorePane = document.getElementById('events-explore-pane');
+      const myTicketsPane = document.getElementById('my-tickets-list');
+      if (!explorePane || !myTicketsPane) return;
+
+      // Eventos Disponibles
+      explorePane.innerHTML = appState.events.map(evt => `
+        <div class="bg-white rounded-3xl border border-slate-200 p-5 shadow-sm flex flex-col justify-between space-y-4">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full ${evt.modality === 'Presencial' ? 'bg-emerald-100 text-emerald-800' : 'bg-blue-100 text-blue-800'}">
+                ${evt.modality}
+              </span>
+              <span class="text-[11px] font-bold text-slate-500"><i class="fas fa-users mr-1"></i> Aforo: ${evt.aforo} (RN-06)</span>
+            </div>
+
+            <h3 class="text-sm font-extrabold text-slate-900 leading-snug">${evt.title}</h3>
+            <p class="text-xs text-slate-500 mt-1"><i class="far fa-calendar-alt text-nexus-blue mr-1"></i> ${evt.date}</p>
+            <p class="text-xs text-slate-500 mt-0.5"><i class="fas fa-map-pin text-nexus-blue mr-1"></i> ${evt.location}</p>
+            <p class="text-[11px] text-slate-400 mt-2 font-medium">Organiza: ${evt.organizer}</p>
+          </div>
+
+          <div>
+            ${evt.registered ? `
+              <button onclick="openQrModal('${evt.title}', '${appState.user.email}', '${evt.ticketCode}')" 
+                      class="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-nexus-cyan text-xs font-bold transition-all flex items-center justify-center gap-2">
+                <i class="fas fa-qrcode"></i> Ver mi Boleto QR Activo
+              </button>
+            ` : `
+              <button onclick="handleRegisterEvent('${evt.id}')" 
+                      class="w-full py-2.5 rounded-xl bg-nexus-blue hover:bg-nexus-blueHover text-white text-xs font-bold transition-all shadow-sm flex items-center justify-center gap-2">
+                <i class="fas fa-ticket"></i> Inscribirme con 1 Clic (Gratis)
+              </button>
+            `}
+          </div>
+        </div>
+      `).join('');
+
+      // Mis Pases Guardados
+      const registeredList = appState.events.filter(e => e.registered);
+      document.getElementById('my-tickets-count').textContent = registeredList.length;
+
+      myTicketsPane.innerHTML = registeredList.map(t => `
+        <div class="p-5 bg-white rounded-3xl border border-slate-200 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div class="space-y-1 text-center sm:text-left">
+            <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">Boleto Digital Listo</span>
+            <h4 class="text-sm font-extrabold text-slate-900 mt-1">${t.title}</h4>
+            <p class="text-xs text-slate-500"><i class="far fa-calendar text-nexus-blue mr-1"></i> ${t.date}</p>
+            <p class="text-xs text-slate-500"><i class="fas fa-location-dot text-nexus-blue mr-1"></i> ${t.location}</p>
+            <span class="inline-block text-[10px] font-mono bg-slate-100 px-2 py-0.5 rounded text-slate-600 mt-2">Pase: ${t.ticketCode}</span>
+          </div>
+
+          <button onclick="openQrModal('${t.title}', '${appState.user.email}', '${t.ticketCode}')" 
+                  class="px-4 py-3 rounded-2xl bg-nexus-blue hover:bg-nexus-blueHover text-white text-xs font-bold transition-all shadow-md flex items-center gap-2 shrink-0">
+            <i class="fas fa-qrcode text-base"></i>
+            <span>Mostrar QR</span>
+          </button>
+        </div>
+      `).join('');
+    }
+
+    function switchEventsTab(tab) {
+      const explore = document.getElementById('events-explore-pane');
+      const tickets = document.getElementById('events-tickets-pane');
+      const tabAll = document.getElementById('tab-events-all');
+      const tabTickets = document.getElementById('tab-events-tickets');
+
+      if (tab === 'all') {
+        explore.classList.remove('hidden');
+        tickets.classList.add('hidden');
+        tabAll.className = "px-4 py-2 rounded-xl text-xs font-bold bg-nexus-blue text-white shadow-sm";
+        tabTickets.className = "px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200";
+      } else {
+        explore.classList.add('hidden');
+        tickets.classList.remove('hidden');
+        tabTickets.className = "px-4 py-2 rounded-xl text-xs font-bold bg-nexus-blue text-white shadow-sm";
+        tabAll.className = "px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200";
+      }
+    }
+
+    function handleRegisterEvent(evtId) {
+      const evt = appState.events.find(e => e.id === evtId);
+      if (evt) {
+        evt.registered = true;
+        renderEvents();
+        showToast(`¡Inscrito con éxito! Boleto QR generado para ${evt.title}.`, 'success');
+        openQrModal(evt.title, appState.user.email, evt.ticketCode);
+      }
+    }
+
+    function openQrModal(title, user, code) {
+      document.getElementById('ticket-modal-title').textContent = title;
+      document.getElementById('ticket-modal-user').textContent = user;
+      document.getElementById('ticket-modal-code').textContent = code;
+      document.getElementById('modal-qr-ticket').classList.remove('hidden');
+    }
+
+    function handleSyncCalendar() {
+      showToast('Sincronizando evento con Google Calendar (RF-12)...', 'info');
+      setTimeout(() => {
+        showToast('¡Evento agregado a tu calendario con enlace de recordatorio!', 'success');
+      }, 800);
+    }
+
+    function handleDownloadTicketQr() {
+      showToast('Descargando pase QR seguro en formato PNG...', 'info');
+      setTimeout(() => {
+        showToast('Pase guardado en descargas para acceso sin conexión a internet.', 'success');
+      }, 700);
+    }
+
+    function openCreateEventModal() {
+      showToast('Para crear eventos institucionales se requiere perfil empresarial verificado (RN-01).', 'info');
+    }
+
+    /* =========================================================================
+       CHAT SÍNCRONO & MENSAJERÍA (RF-06 / RN-04)
+       ========================================================================= */
+    function selectChatConversation(contactKey) {
+      appState.currentChatContact = contactKey;
+      
+      document.querySelectorAll('.chat-contact-btn').forEach(btn => {
+        btn.classList.remove('bg-blue-50/70');
+      });
+      const activeBtn = document.getElementById(`contact-${contactKey}`);
+      if (activeBtn) activeBtn.classList.add('bg-blue-50/70');
+
+      const nameEl = document.getElementById('active-chat-name');
+      const avatarEl = document.getElementById('active-chat-avatar');
+      const statusEl = document.getElementById('active-chat-status');
+
+      if (contactKey === 'sofia') {
+        nameEl.textContent = 'Arq. Sofía Díaz';
+        avatarEl.src = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80';
+        statusEl.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Activa ahora en Tarapoto';
+      } else {
+        nameEl.textContent = 'Elena Ramos (RR.HH.)';
+        avatarEl.src = 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=120&q=80';
+        statusEl.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span> CacaoTech Perú • En línea';
+      }
+
+      renderChatMessages();
+    }
+
+    function renderChatMessages() {
+      const container = document.getElementById('chat-messages-container');
+      if (!container) return;
+
+      const msgs = appState.chatMessages[appState.currentChatContact] || [];
+      container.innerHTML = msgs.map(m => `
+        <div class="flex ${m.sender === 'me' ? 'justify-end' : 'justify-start'}">
+          <div class="max-w-xs sm:max-w-md rounded-2xl p-3 text-xs leading-relaxed shadow-sm ${
+            m.sender === 'me' 
+              ? 'bg-nexus-blue text-white rounded-br-none' 
+              : 'bg-white border border-slate-200 text-slate-800 rounded-bl-none'
+          }">
+            ${m.text}
+          </div>
+        </div>
+      `).join('');
+
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function handleSendChatMessage(e) {
+      e.preventDefault();
+      const input = document.getElementById('chat-input');
+      const text = input.value.trim();
+      if (!text) return;
+
+      if (appState.user.messagesQuotaToday <= 0) {
+        showToast('Has alcanzado el límite de 20 mensajes diarios contra spam (RN-04).', 'info');
+        return;
+      }
+
+      appState.user.messagesQuotaToday--;
+      document.getElementById('daily-quota-badge').textContent = `Cupo diario: ${appState.user.messagesQuotaToday}/20 (RN-04)`;
+
+      // Agregar mensaje
+      appState.chatMessages[appState.currentChatContact].push({
+        sender: 'me',
+        text: text
+      });
+
+      input.value = '';
+      renderChatMessages();
+
+      // Simulación de respuesta síncrona
+      setTimeout(() => {
+        const contactName = appState.currentChatContact === 'sofia' ? 'Sofía' : 'Elena';
+        appState.chatMessages[appState.currentChatContact].push({
+          sender: 'them',
+          text: `Entendido Carlos, me alegra comunicarme por NEXUS. ¡Hablemos en breve!`
+        });
+        renderChatMessages();
+      }, 1000);
+    }
+
+    function sendSimulatedCv() {
+      appState.chatMessages[appState.currentChatContact].push({
+        sender: 'me',
+        text: '📎 Ha adjuntado el documento: "CV_Carlos_Mendoza_Ing_Sistemas.pdf" (Verificado por UPN).'
+      });
+      renderChatMessages();
+      showToast('CV Digital en PDF adjuntado de forma segura en la conversación.', 'success');
+    }
+
+    /* =========================================================================
+       PRIVACIDAD Y CONFIGURACIONES (Término 19 / RNF-15)
+       ========================================================================= */
+    function togglePrivacySetting(settingName, isChecked) {
+      const state = isChecked ? 'Activado' : 'Desactivado';
+      showToast(`${settingName}: ${state}. Configuración guardada en la nube.`, 'info');
+    }
+
+    function handleDownloadUserData() {
+      showToast('Generando paquete cifrado con tus datos de perfil, conexiones y postulaciones...', 'info');
+      setTimeout(() => {
+        showToast('Descarga completada: nexus_user_data_carlos_mendoza.json', 'success');
+      }, 1000);
+    }
+
+    /* =========================================================================
+       UTILIDADES GENERALES, ACCESIBILIDAD & TOASTS
+       ========================================================================= */
+    function handleConnectUser(name, btn) {
+      btn.innerHTML = '<i class="fas fa-check text-xs mr-1"></i> Solicitud Enviada';
+      btn.disabled = true;
+      btn.className = "mt-2 w-full py-1 px-2.5 rounded-lg bg-emerald-50 text-emerald-700 text-[11px] font-bold cursor-default border border-emerald-200";
+      showToast(`Solicitud de amistad profesional enviada a ${name} (RF-03).`, 'success');
+    }
+
+    function handleUniversalSearch(query) {
+      const dropdown = document.getElementById('search-dropdown');
+      if (!query || query.length < 2) {
+        dropdown.classList.add('hidden');
+        return;
+      }
+
+      dropdown.innerHTML = `
+        <div class="p-2 text-[11px] font-bold text-slate-400 uppercase tracking-wider">Resultados coincidentes en San Martín</div>
+        <a href="javascript:void(0)" onclick="navigateTo('jobs'); document.getElementById('search-dropdown').classList.add('hidden');" class="block p-2 rounded-xl hover:bg-slate-50 text-xs font-bold text-slate-800">
+          <i class="fas fa-briefcase text-nexus-blue mr-2"></i> Vacante: Desarrollador Web en CacaoTech
+        </a>
+        <a href="javascript:void(0)" onclick="navigateTo('events'); document.getElementById('search-dropdown').classList.add('hidden');" class="block p-2 rounded-xl hover:bg-slate-50 text-xs font-bold text-slate-800">
+          <i class="fas fa-qrcode text-nexus-cyan mr-2"></i> Evento: Summit de Innovación 2026
+        </a>
+      `;
+      dropdown.classList.remove('hidden');
+    }
+
+    function closeModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function changeFontSize(size) {
+      const body = document.getElementById('app-body');
+      if (size === 'small') body.style.fontSize = '13.5px';
+      if (size === 'normal') body.style.fontSize = '15px';
+      if (size === 'large') body.style.fontSize = '17px';
+      showToast(`Tamaño de lectura ajustado a: ${size.toUpperCase()}`, 'info');
+    }
+
+    function toggleHighContrast() {
+      document.body.classList.toggle('high-contrast');
+      const isHc = document.body.classList.contains('high-contrast');
+      showToast(isHc ? 'Modo de Alto Contraste ACTIVADO (WCAG 2.1)' : 'Modo de Contraste estándar', 'info');
+    }
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      
+      const borderColor = type === 'success' ? 'border-emerald-500' : 'border-nexus-blue';
+      const icon = type === 'success' ? 'fa-check-circle text-emerald-500' : 'fa-info-circle text-nexus-blue';
+
+      toast.className = `px-4 py-3 rounded-2xl border ${borderColor} bg-white text-xs text-slate-800 flex items-center gap-3 shadow-2xl pointer-events-auto transition-all duration-300 font-semibold`;
+      toast.innerHTML = `<i class="fas ${icon} text-base shrink-0"></i><span>${message}</span>`;
+
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(10px)';
+        setTimeout(() => toast.remove(), 300);
+      }, 3200);
+    }
+
+    /* INICIALIZACIÓN AL CARGAR LA PÁGINA */
+    window.addEventListener('DOMContentLoaded', () => {
+      renderPosts();
+      renderJobs();
+      renderEvents();
+      selectChatConversation('sofia');
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEXUS-Work | Conecta • Desarrolla • Avanza</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            nexus: {
+              blue: '#0A66C2',       /* Azul corporativo formal */
+              blueHover: '#084E96',
+              cyan: '#00D2FF',       /* Cian neón del logo NEXUS */
+              bgLight: '#F8FAFC',    /* Fondo claro y descansado */
+              dark: '#0F172A',
+              border: '#E2E8F0'
+            }
+          },
+          boxShadow: {
+            subtle: '0 4px 20px -2px rgba(10, 102, 194, 0.08)',
+            cardHover: '0 12px 30px -5px rgba(15, 23, 42, 0.12)'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F1F5F9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #CBD5E1;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #0A66C2;
+    }
+
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* Accessibility high contrast class */
+    body.high-contrast {
+      background-color: #ffffff !important;
+      color: #000000 !important;
+    }
+    body.high-contrast .bg-white,
+    body.high-contrast .bg-slate-50,
+    body.high-contrast .bg-slate-900 {
+      background-color: #ffffff !important;
+      border-color: #000000 !important;
+      color: #000000 !important;
+    }
+    body.high-contrast button {
+      border: 2px solid #000000 !important;
+    }
+  </style>
+</head>
+<body id="app-body" class="bg-nexus-bgLight text-slate-800 font-sans antialiased selection:bg-nexus-cyan selection:text-slate-900 overflow-x-hidden text-base">
+
+  <!-- ==================== ACCESSIBILITY TOOLBAR ==================== -->
+  <div id="accessibility-bar" class="bg-slate-900 text-slate-300 text-xs py-1.5 px-4 flex justify-between items-center border-b border-slate-800">
+    <div class="flex items-center gap-4">
+      <span><i class="fa-solid fa-universal-access me-1 text-nexus-cyan"></i> Opciones de Accesibilidad y Lectura (WCAG 2.1 AA)</span>
+    </div>
+    <div class="flex items-center gap-3">
+      <button onclick="changeFontSize('large')" class="hover:text-nexus-cyan font-semibold px-1" title="Aumentar texto">A+</button>
+      <button onclick="changeFontSize('normal')" class="hover:text-nexus-cyan font-semibold px-1" title="Texto normal">Normal</button>
+      <button onclick="changeFontSize('small')" class="hover:text-nexus-cyan font-semibold px-1" title="Disminuir texto">A-</button>
+      <span class="text-slate-700">|</span>
+      <button onclick="toggleHighContrast()" class="hover:text-nexus-cyan px-2 py-0.5 rounded bg-slate-800 border border-slate-700 font-medium">Alto Contraste</button>
+    </div>
+  </div>
+
+  <!-- ==================== HEADER / NAVBAR ==================== -->
+  <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200/80 shadow-sm transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        
+        <!-- Logo Brand -->
+        <a href="index.html" class="flex items-center gap-3 group">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-nexus-cyan to-nexus-blue p-0.5 shadow-sm group-hover:scale-105 transition-transform duration-300">
+            <div class="w-full h-full bg-slate-900 rounded-[10px] flex items-center justify-center">
+              <span class="text-nexus-cyan font-extrabold text-xl tracking-tighter">N</span>
+            </div>
+          </div>
+          <div>
+            <span class="text-2xl font-extrabold tracking-tight text-slate-900">NEXUS<span class="text-nexus-blue">-Work</span></span>
+            <span class="block text-[10px] uppercase tracking-widest text-slate-500 font-semibold">Conecta • Desarrolla • Avanza</span>
+          </div>
+        </a>
+
+        <!-- Desktop Navigation Links -->
+        <nav class="hidden md:flex items-center space-x-1 lg:space-x-2">
+          <a href="#inicio" class="px-3.5 py-2 rounded-lg text-sm font-semibold text-slate-700 hover:text-nexus-blue hover:bg-slate-100 transition-colors">Inicio</a>
+          <a href="#profesionales" class="px-3.5 py-2 rounded-lg text-sm font-semibold text-slate-700 hover:text-nexus-blue hover:bg-slate-100 transition-colors">Talento en Acción</a>
+          <a href="#como-funciona" class="px-3.5 py-2 rounded-lg text-sm font-semibold text-slate-700 hover:text-nexus-blue hover:bg-slate-100 transition-colors">¿Cómo Funciona?</a>
+          <a href="#beneficios" class="px-3.5 py-2 rounded-lg text-sm font-semibold text-slate-700 hover:text-nexus-blue hover:bg-slate-100 transition-colors">Beneficios</a>
+          <a href="#empleos" class="px-3.5 py-2 rounded-lg text-sm font-semibold text-slate-700 hover:text-nexus-blue hover:bg-slate-100 transition-colors">Empleos & Sueldos</a>
+          <a href="#eventos" class="px-3.5 py-2 rounded-lg text-sm font-semibold text-slate-700 hover:text-nexus-blue hover:bg-slate-100 transition-colors">Eventos QR</a>
+        </nav>
+
+        <!-- Auth Buttons Header -->
+        <div class="hidden md:flex items-center gap-3">
+          <button onclick="openAuthModal('login')" class="px-4 py-2.5 rounded-xl border-2 border-nexus-blue text-nexus-blue font-bold text-sm hover:bg-nexus-blue hover:text-white transition-all duration-200 shadow-sm">
+            <i class="fas fa-sign-in-alt mr-1.5"></i> Iniciar sesión
+          </button>
+          <a href="nexus_work_onboarding_registro.html" class="px-5 py-2.5 rounded-xl bg-nexus-blue hover:bg-nexus-blueHover text-white font-bold text-sm transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 inline-block">
+            Registrarse
+          </a>
+        </div>
+
+        <!-- Mobile Menu Toggle Button -->
+        <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg bg-slate-100 text-slate-700 hover:text-nexus-blue focus:outline-none">
+          <i class="fas fa-bars text-xl"></i>
+        </button>
+
+      </div>
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-slate-200 px-4 pt-2 pb-6 space-y-3">
+      <a href="#inicio" class="block px-3 py-2 rounded-lg text-base font-semibold text-slate-700 hover:bg-slate-100">Inicio</a>
+      <a href="#profesionales" class="block px-3 py-2 rounded-lg text-base font-semibold text-slate-700 hover:bg-slate-100">Talento en Acción</a>
+      <a href="#como-funciona" class="block px-3 py-2 rounded-lg text-base font-semibold text-slate-700 hover:bg-slate-100">¿Cómo Funciona?</a>
+      <a href="#beneficios" class="block px-3 py-2 rounded-lg text-base font-semibold text-slate-700 hover:bg-slate-100">Beneficios</a>
+      <a href="#empleos" class="block px-3 py-2 rounded-lg text-base font-semibold text-slate-700 hover:bg-slate-100">Empleos & Sueldos</a>
+      <a href="#eventos" class="block px-3 py-2 rounded-lg text-base font-semibold text-slate-700 hover:bg-slate-100">Eventos QR</a>
+      
+      <div class="pt-4 border-t border-slate-200 flex flex-col gap-2">
+        <button onclick="openAuthModal('login')" class="w-full py-2.5 rounded-xl border-2 border-nexus-blue text-nexus-blue font-bold text-center">
+          Iniciar sesión
+        </button>
+        <a href="nexus_work_onboarding_registro.html" class="w-full py-2.5 rounded-xl bg-nexus-blue text-white font-bold text-center shadow-md block">
+          Registrarse gratis
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== HERO SECTION ==================== -->
+  <section id="inicio" class="relative pt-12 pb-20 md:pt-20 md:pb-28 bg-gradient-to-b from-blue-50/50 via-white to-slate-50 border-b border-slate-200/80 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      
+      <div class="grid lg:grid-cols-12 gap-12 items-center">
+        
+        <!-- Left Hero Text -->
+        <div class="lg:col-span-7 text-center lg:text-left">
+          
+          <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-100/80 border border-blue-200 text-nexus-blue text-xs font-bold uppercase tracking-wider mb-6 shadow-sm">
+            <span class="w-2.5 h-2.5 rounded-full bg-nexus-cyan animate-pulse"></span>
+            La Red Social Profesional Enfocada en Ti
+          </div>
+
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 leading-tight mb-6">
+            Impulsa tu carrera y conecta con oportunidades <span class="text-nexus-blue underline decoration-nexus-cyan decoration-wavy decoration-2">reales en tu región</span>
+          </h1>
+
+          <p class="text-lg sm:text-xl text-slate-600 font-normal mb-8 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+            Descubre empleo formal, participa en conferencias con pase digital por QR y fortalece tu red de contactos en una plataforma clara, moderna e intuitiva.
+          </p>
+
+          <!-- Search Component -->
+          <div class="bg-white p-3 rounded-2xl max-w-2xl mx-auto lg:mx-0 shadow-subtle border border-slate-200/90 mb-8">
+            <form onsubmit="handleHeroSearch(event)" class="grid grid-cols-1 md:grid-cols-12 gap-3">
+              <div class="md:col-span-5 relative flex items-center bg-slate-50 rounded-xl px-3.5 py-2.5 border border-slate-200 focus-within:border-nexus-blue">
+                <i class="fas fa-search text-nexus-blue mr-3 text-base"></i>
+                <input type="text" id="search-title" placeholder="Cargo, profesión o habilidad..." class="w-full bg-transparent text-slate-800 text-sm focus:outline-none placeholder-slate-400 font-medium">
+              </div>
+              <div class="md:col-span-4 relative flex items-center bg-slate-50 rounded-xl px-3.5 py-2.5 border border-slate-200 focus-within:border-nexus-blue">
+                <i class="fas fa-map-marker-alt text-nexus-blue mr-3 text-base"></i>
+                <input type="text" id="search-location" value="Tarapoto, San Martín, Perú" placeholder="Ciudad..." class="w-full bg-transparent text-slate-800 text-sm focus:outline-none placeholder-slate-400 font-medium">
+              </div>
+              <div class="md:col-span-3">
+                <button type="submit" class="w-full h-full py-3 px-5 rounded-xl bg-nexus-blue hover:bg-nexus-blueHover text-white font-bold text-sm transition-all duration-200 shadow-md flex items-center justify-center gap-2">
+                  <i class="fas fa-search"></i>
+                  <span>Buscar</span>
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Trust Badges -->
+          <div class="flex flex-wrap items-center justify-center lg:justify-start gap-6 text-slate-500 text-xs font-semibold">
+            <div class="flex items-center gap-2"><i class="fas fa-check-circle text-emerald-500 text-sm"></i> Cuentas Verificadas</div>
+            <div class="flex items-center gap-2"><i class="fas fa-qrcode text-nexus-blue text-sm"></i> Acreditación QR Integrada</div>
+            <div class="flex items-center gap-2"><i class="fas fa-shield-alt text-amber-500 text-sm"></i> Entorno Libre de Spam</div>
+          </div>
+
+        </div>
+
+        <!-- Right Hero Preview Card -->
+        <div class="lg:col-span-5 relative">
+          <div class="relative mx-auto max-w-md">
+            <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xl space-y-4">
+              
+              <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                <span class="text-xs font-bold text-slate-900"><i class="fas fa-sparkles text-nexus-blue mr-1"></i> Recomendaciones para ti</span>
+                <span class="text-[11px] text-slate-500">Tarapoto y alrededores</span>
+              </div>
+
+              <!-- Item 1 -->
+              <div class="flex items-center gap-3.5 p-3 rounded-2xl bg-slate-50 border border-slate-100">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=160&q=80" alt="Sofía Díaz" class="w-12 h-12 rounded-full object-cover ring-2 ring-nexus-blue/20">
+                <div class="flex-1 min-w-0">
+                  <h4 class="font-bold text-slate-900 text-xs truncate">Arq. Sofía Díaz</h4>
+                  <p class="text-[11px] text-slate-500 truncate">Diseño Urbano & Proyectos</p>
+                  <span class="inline-flex items-center text-[10px] text-emerald-600 font-semibold bg-emerald-50 px-2 py-0.5 rounded-md mt-0.5">Disponible proyectos</span>
+                </div>
+                <button onclick="handleConnect('Sofía Díaz')" class="px-3 py-1.5 text-xs font-bold text-nexus-blue bg-blue-50 hover:bg-nexus-blue hover:text-white rounded-lg transition-colors">Conectar</button>
+              </div>
+
+              <!-- Item 2 -->
+              <div class="flex items-center gap-3.5 p-3 rounded-2xl bg-slate-50 border border-slate-100">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=160&q=80" alt="Carlos Mendoza" class="w-12 h-12 rounded-full object-cover ring-2 ring-nexus-cyan/20">
+                <div class="flex-1 min-w-0">
+                  <h4 class="font-bold text-slate-900 text-xs truncate">Carlos Mendoza</h4>
+                  <p class="text-[11px] text-slate-500 truncate">Ingeniero de Sistemas</p>
+                  <span class="inline-flex items-center text-[10px] text-blue-600 font-semibold bg-blue-50 px-2 py-0.5 rounded-md mt-0.5">Buscando oportunidades</span>
+                </div>
+                <button onclick="handleConnect('Carlos Mendoza')" class="px-3 py-1.5 text-xs font-bold text-nexus-blue bg-blue-50 hover:bg-nexus-blue hover:text-white rounded-lg transition-colors">Conectar</button>
+              </div>
+
+              <!-- Stat Mini Card -->
+              <div class="grid grid-cols-2 gap-3 pt-2">
+                <div class="p-3 bg-slate-900 rounded-2xl text-white">
+                  <div class="text-xl font-extrabold text-nexus-cyan">98%</div>
+                  <div class="text-[10px] text-slate-300">Satisfacción en networking</div>
+                </div>
+                <div class="p-3 bg-nexus-blue rounded-2xl text-white">
+                  <div class="text-xl font-extrabold text-white">100%</div>
+                  <div class="text-[10px] text-blue-100">Entorno verificado</div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== CAROUSEL: PROFESIONALES TRABAJANDO (6 RUBROS) ==================== -->
+  <section id="profesionales" class="py-16 bg-white border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-10">
+        <div>
+          <span class="text-nexus-blue text-xs font-bold uppercase tracking-widest">Nuestra Comunidad Activa</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">Profesionales de Diversas Áreas Conectando Hoy</h2>
+          <p class="text-slate-600 text-sm mt-1">Descubre especialistas realizando proyectos reales e interactuando en la plataforma.</p>
+        </div>
+
+        <div class="flex items-center gap-2 mt-4 md:mt-0">
+          <button onclick="scrollCarousel(-1)" class="w-10 h-10 rounded-full border border-slate-300 flex items-center justify-center hover:bg-slate-100 transition-colors shadow-sm">
+            <i class="fas fa-chevron-left text-slate-600"></i>
+          </button>
+          <button onclick="scrollCarousel(1)" class="w-10 h-10 rounded-full border border-slate-300 flex items-center justify-center hover:bg-slate-100 transition-colors shadow-sm">
+            <i class="fas fa-chevron-right text-slate-600"></i>
+          </button>
+        </div>
+      </div>
+
+      <div id="carousel-container" class="flex gap-6 overflow-x-auto hide-scrollbar scroll-smooth pb-4">
+        
+        <!-- Card 1: Software -->
+        <div class="min-w-[280px] sm:min-w-[320px] bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-cardHover transition-all duration-300 group">
+          <div class="h-44 overflow-hidden relative">
+            <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=600&q=80" alt="Ingenieros de Software" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <span class="absolute top-3 left-3 bg-slate-900/80 backdrop-blur-md text-white text-[11px] font-semibold px-2.5 py-1 rounded-full">Tecnología</span>
+          </div>
+          <div class="p-5">
+            <h3 class="font-bold text-slate-900 text-base">Ingeniería de Software</h3>
+            <p class="text-xs text-slate-500 mt-1">Desarrollo de proyectos digitales y arquitectura de sistemas en equipos ágiles.</p>
+            <div class="mt-4 pt-4 border-t border-slate-200/80 flex items-center justify-between">
+              <span class="text-xs font-semibold text-slate-600"><i class="fas fa-users text-nexus-blue mr-1"></i> +1.2k Miembros</span>
+              <a href="nexus_work_onboarding_registro.html" class="text-xs font-bold text-nexus-blue hover:underline">Explorar red →</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2: HR -->
+        <div class="min-w-[280px] sm:min-w-[320px] bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-cardHover transition-all duration-300 group">
+          <div class="h-44 overflow-hidden relative">
+            <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=600&q=80" alt="Recursos Humanos" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <span class="absolute top-3 left-3 bg-slate-900/80 backdrop-blur-md text-white text-[11px] font-semibold px-2.5 py-1 rounded-full">Gestión de Talento</span>
+          </div>
+          <div class="p-5">
+            <h3 class="font-bold text-slate-900 text-base">Recursos Humanos & Selección</h3>
+            <p class="text-xs text-slate-500 mt-1">Especialistas conectando candidatos calificados con empresas líderes en la región.</p>
+            <div class="mt-4 pt-4 border-t border-slate-200/80 flex items-center justify-between">
+              <span class="text-xs font-semibold text-slate-600"><i class="fas fa-users text-nexus-blue mr-1"></i> +850 Reclutadores</span>
+              <a href="nexus_work_onboarding_registro.html" class="text-xs font-bold text-nexus-blue hover:underline">Explorar red →</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3: Business -->
+        <div class="min-w-[280px] sm:min-w-[320px] bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-cardHover transition-all duration-300 group">
+          <div class="h-44 overflow-hidden relative">
+            <img src="https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=600&q=80" alt="Marketing y Negocios" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <span class="absolute top-3 left-3 bg-slate-900/80 backdrop-blur-md text-white text-[11px] font-semibold px-2.5 py-1 rounded-full">Estrategia</span>
+          </div>
+          <div class="p-5">
+            <h3 class="font-bold text-slate-900 text-base">Marketing & Estrategia Digital</h3>
+            <p class="text-xs text-slate-500 mt-1">Profesionales impulsando marcas, crecimiento comercial y alianzas estratégicas.</p>
+            <div class="mt-4 pt-4 border-t border-slate-200/80 flex items-center justify-between">
+              <span class="text-xs font-semibold text-slate-600"><i class="fas fa-users text-nexus-blue mr-1"></i> +940 Especialistas</span>
+              <a href="nexus_work_onboarding_registro.html" class="text-xs font-bold text-nexus-blue hover:underline">Explorar red →</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4: Health -->
+        <div class="min-w-[280px] sm:min-w-[320px] bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-cardHover transition-all duration-300 group">
+          <div class="h-44 overflow-hidden relative">
+            <img src="https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=600&q=80" alt="Salud" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <span class="absolute top-3 left-3 bg-slate-900/80 backdrop-blur-md text-white text-[11px] font-semibold px-2.5 py-1 rounded-full">Salud</span>
+          </div>
+          <div class="p-5">
+            <h3 class="font-bold text-slate-900 text-base">Salud & Bienestar Ocupacional</h3>
+            <p class="text-xs text-slate-500 mt-1">Médicos, auditores y gestores de salud promoviendo buenas prácticas laborales.</p>
+            <div class="mt-4 pt-4 border-t border-slate-200/80 flex items-center justify-between">
+              <span class="text-xs font-semibold text-slate-600"><i class="fas fa-users text-nexus-blue mr-1"></i> +620 Médicos</span>
+              <a href="nexus_work_onboarding_registro.html" class="text-xs font-bold text-nexus-blue hover:underline">Explorar red →</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 5: Architecture -->
+        <div class="min-w-[280px] sm:min-w-[320px] bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-cardHover transition-all duration-300 group">
+          <div class="h-44 overflow-hidden relative">
+            <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=600&q=80" alt="Arquitectura" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <span class="absolute top-3 left-3 bg-slate-900/80 backdrop-blur-md text-white text-[11px] font-semibold px-2.5 py-1 rounded-full">Construcción</span>
+          </div>
+          <div class="p-5">
+            <h3 class="font-bold text-slate-900 text-base">Arquitectura & Diseño de Obras</h3>
+            <p class="text-xs text-slate-500 mt-1">Diseñadores urbanos e ingenieros civiles supervisando edificaciones sostenibles.</p>
+            <div class="mt-4 pt-4 border-t border-slate-200/80 flex items-center justify-between">
+              <span class="text-xs font-semibold text-slate-600"><i class="fas fa-users text-nexus-blue mr-1"></i> +530 Proyectistas</span>
+              <a href="nexus_work_onboarding_registro.html" class="text-xs font-bold text-nexus-blue hover:underline">Explorar red →</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 6: Education -->
+        <div class="min-w-[280px] sm:min-w-[320px] bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-cardHover transition-all duration-300 group">
+          <div class="h-44 overflow-hidden relative">
+            <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=600&q=80" alt="Educación" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <span class="absolute top-3 left-3 bg-slate-900/80 backdrop-blur-md text-white text-[11px] font-semibold px-2.5 py-1 rounded-full">Educación</span>
+          </div>
+          <div class="p-5">
+            <h3 class="font-bold text-slate-900 text-base">Educación & Docencia Digital</h3>
+            <p class="text-xs text-slate-500 mt-1">Docentes e investigadores compartiendo conocimiento y talleres de capacitación.</p>
+            <div class="mt-4 pt-4 border-t border-slate-200/80 flex items-center justify-between">
+              <span class="text-xs font-semibold text-slate-600"><i class="fas fa-users text-nexus-blue mr-1"></i> +710 Educadores</span>
+              <a href="nexus_work_onboarding_registro.html" class="text-xs font-bold text-nexus-blue hover:underline">Explorar red →</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== PASO A PASO: ¿CÓMO TE AYUDA? ==================== -->
+  <section id="como-funciona" class="py-20 bg-slate-50 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="text-nexus-blue text-xs font-bold uppercase tracking-widest">Guía Sencilla</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-2">¿Cómo Te Ayuda NEXUS-Work a Encontrar Trabajo?</h2>
+        <p class="text-slate-600 text-base mt-2">Diseñamos un flujo simple e intuitivo para que logres tus metas profesionales en 4 pasos.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm relative hover:shadow-cardHover transition-all">
+          <span class="w-8 h-8 rounded-full bg-nexus-blue text-white font-extrabold text-xs flex items-center justify-center mb-4">1</span>
+          <h3 class="font-bold text-slate-900 text-base mb-2">Perfil Profesional</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">Crea tu CV digital estructurado ingresando tu trayectoria, certificaciones y competencias clave.</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm relative hover:shadow-cardHover transition-all">
+          <span class="w-8 h-8 rounded-full bg-nexus-blue text-white font-extrabold text-xs flex items-center justify-center mb-4">2</span>
+          <h3 class="font-bold text-slate-900 text-base mb-2">Búsqueda Regional</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">Encuentra oportunidades verificadas en tu ciudad o región con nuestros filtros avanzados.</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm relative hover:shadow-cardHover transition-all">
+          <span class="w-8 h-8 rounded-full bg-nexus-blue text-white font-extrabold text-xs flex items-center justify-center mb-4">3</span>
+          <h3 class="font-bold text-slate-900 text-base mb-2">Postulación en 1 Clic</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">Envía tu candidatura directamente compartiendo tu perfil validado sin llenar largos formularios.</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm relative hover:shadow-cardHover transition-all">
+          <span class="w-8 h-8 rounded-full bg-nexus-blue text-white font-extrabold text-xs flex items-center justify-center mb-4">4</span>
+          <h3 class="font-bold text-slate-900 text-base mb-2">Networking con QR</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">Asiste a conferencias de tu área y conecta con reclutadores mostrando tu pase digital por QR.</p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== MÓDULO DE BENEFICIOS POR PERFIL ==================== -->
+  <section id="beneficios" class="py-20 bg-white border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <span class="text-nexus-blue text-xs font-bold uppercase tracking-widest">Soluciones Adaptadas</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-2">Beneficios Diseñados para Cada Tipo de Usuario</h2>
+      </div>
+
+      <!-- Tab Buttons -->
+      <div class="flex justify-center mb-10 gap-2 flex-wrap">
+        <button onclick="switchTab('egresados')" id="tab-egresados" class="tab-btn px-5 py-2.5 rounded-xl font-bold text-xs bg-nexus-blue text-white shadow-md transition-all">
+          <i class="fas fa-user-graduate mr-2"></i> Egresados & Jóvenes
+        </button>
+        <button onclick="switchTab('empresas')" id="tab-empresas" class="tab-btn px-5 py-2.5 rounded-xl font-bold text-xs bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all">
+          <i class="fas fa-building mr-2"></i> Reclutadores & Empresas
+        </button>
+        <button onclick="switchTab('freelance')" id="tab-freelance" class="tab-btn px-5 py-2.5 rounded-xl font-bold text-xs bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all">
+          <i class="fas fa-laptop-house mr-2"></i> Freelancers & Consultores
+        </button>
+      </div>
+
+      <!-- Tab Content Containers -->
+      <div id="content-egresados" class="tab-content grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="bg-slate-50 p-8 rounded-3xl border border-slate-200 shadow-sm">
+          <div class="w-12 h-12 rounded-2xl bg-blue-100 text-nexus-blue flex items-center justify-center text-xl mb-6">
+            <i class="fas fa-address-card"></i>
+          </div>
+          <h3 class="text-xl font-bold text-slate-900 mb-2">CV Digital Limpio</h3>
+          <p class="text-slate-600 text-sm leading-relaxed">Presenta tu educación y proyectos sin necesidad de experiencia previa compleja.</p>
+        </div>
+        <div class="bg-slate-50 p-8 rounded-3xl border border-slate-200 shadow-sm">
+          <div class="w-12 h-12 rounded-2xl bg-cyan-100 text-cyan-700 flex items-center justify-center text-xl mb-6">
+            <i class="fas fa-qrcode"></i>
+          </div>
+          <h3 class="text-xl font-bold text-slate-900 mb-2">Eventos de Networking</h3>
+          <p class="text-slate-600 text-sm leading-relaxed">Pases con QR para capacitaciones y ferias laborales directas en tu región.</p>
+        </div>
+        <div class="bg-slate-50 p-8 rounded-3xl border border-slate-200 shadow-sm">
+          <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-xl mb-6">
+            <i class="fas fa-rocket"></i>
+          </div>
+          <h3 class="text-xl font-bold text-slate-900 mb-2">Primer Empleo Verificado</h3>
+          <p class="text-slate-600 text-sm leading-relaxed">Filtra vacantes dirigidas específicamente a practicantes y profesionales junior.</p>
+        </div>
+      </div>
+
+      <div id="content-empresas" class="tab-content hidden grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="bg-slate-50 p-8 rounded-3xl border border-slate-200 shadow-sm">
+          <div class="w-12 h-12 rounded-2xl bg-blue-100 text-nexus-blue flex items-center justify-center text-xl mb-6">
+            <i class="fas fa-search-location"></i>
+          </div>
+          <h3 class="text-xl font-bold text-slate-900 mb-2">Talento Regional</h3>
+          <p class="text-slate-600 text-sm leading-relaxed">Encuentra candidatos calificados directamente en Tarapoto y departamentos cercanos.</p>
+        </div>
+        <div class="bg-slate-50 p-8 rounded-3xl border border-slate-200 shadow-sm">
+          <div class="w-12 h-12 rounded-2xl bg-purple-100 text-purple-700 flex items-center justify-center text-xl mb-6">
+            <i class="fas fa-user-check"></i>
+          </div>
+          <h3 class="text-xl font-bold text-slate-900 mb-2">Perfiles Validados</h3>
+          <p class="text-slate-600 text-sm leading-relaxed">Ahorra tiempo en procesos de selección gracias a la verificación de antecedentes académicos.</p>
+        </div>
+        <div class="bg-slate-50 p-8 rounded-3xl border border-slate-200 shadow-sm">
+          <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center text-xl mb-6">
+            <i class="fas fa-bullhorn"></i>
+          </div>
+          <h3 class="text-xl font-bold text-slate-900 mb-2">Publicación Rápida</h3>
+          <p class="text-slate-600 text-sm leading-relaxed">Publica ofertas laborales y gestiona candidatos recibidos en un panel claro.</p>
+        </div>
+      </div>
+
+      <div id="content-freelance" class="tab-content hidden grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="bg-slate-50 p-8 rounded-3xl border border-slate-200 shadow-sm">
+          <div class="w-12 h-12 rounded-2xl bg-indigo-100 text-indigo-700 flex items-center justify-center text-xl mb-6">
+            <i class="fas fa-briefcase"></i>
+          </div>
+          <h3 class="text-xl font-bold text-slate-900 mb-2">Portafolio Visible</h3>
+          <p class="text-slate-600 text-sm leading-relaxed">Muestra tus proyectos realizados a empresas que buscan consultorías externas.</p>
+        </div>
+        <div class="bg-slate-50 p-8 rounded-3xl border border-slate-200 shadow-sm">
+          <div class="w-12 h-12 rounded-2xl bg-pink-100 text-pink-700 flex items-center justify-center text-xl mb-6">
+            <i class="fas fa-handshake"></i>
+          </div>
+          <h3 class="text-xl font-bold text-slate-900 mb-2">Conexión Directa</h3>
+          <p class="text-slate-600 text-sm leading-relaxed">Sin intermediarios agresivos: acuerda condiciones directamente con el cliente.</p>
+        </div>
+        <div class="bg-slate-50 p-8 rounded-3xl border border-slate-200 shadow-sm">
+          <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-xl mb-6">
+            <i class="fas fa-star"></i>
+          </div>
+          <h3 class="text-xl font-bold text-slate-900 mb-2">Reputación y Reseñas</h3>
+          <p class="text-slate-600 text-sm leading-relaxed">Construye una calificación confiable respaldada por empresas de tu región.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== TRANSPARENCIA DE SUELDOS ==================== -->
+  <section id="empleos" class="py-16 bg-slate-50 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-nexus-blue p-8 sm:p-12 rounded-3xl text-white shadow-xl relative overflow-hidden">
+        <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 mb-8">
+          <div>
+            <span class="text-nexus-cyan text-xs font-bold uppercase tracking-widest">Información Transparente</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold mt-1">Potencial de Ingresos Promedio por Sector</h2>
+            <p class="text-slate-300 text-sm mt-2 max-w-2xl">Datos de referencia para orientar tus metas laborales en el mercado peruano.</p>
+          </div>
+          
+          <a href="nexus_work_onboarding_registro.html" class="px-6 py-3 rounded-xl bg-nexus-cyan text-slate-950 font-extrabold text-sm hover:bg-white transition-colors shadow-md inline-block">
+            Ver Ofertas Activas
+          </a>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10">
+            <div class="text-xs text-slate-300">Ingeniería de Software</div>
+            <div class="text-xl font-bold text-nexus-cyan mt-1">S/ 46,869 <span class="text-xs font-normal text-slate-300">/ año</span></div>
+          </div>
+          <div class="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10">
+            <div class="text-xs text-slate-300">Business Analyst</div>
+            <div class="text-xl font-bold text-nexus-cyan mt-1">S/ 35,546 <span class="text-xs font-normal text-slate-300">/ año</span></div>
+          </div>
+          <div class="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10">
+            <div class="text-xs text-slate-300">Gestión de Recursos Humanos</div>
+            <div class="text-xl font-bold text-nexus-cyan mt-1">S/ 54,615 <span class="text-xs font-normal text-slate-300">/ año</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== EVENTOS CON CÓDIGO QR ==================== -->
+  <section id="eventos" class="py-16 bg-white border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="mb-10">
+        <span class="text-nexus-blue text-xs font-bold uppercase tracking-widest">Conexión Presencial</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">Próximos Eventos y Conferencias</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-slate-50 rounded-2xl border border-slate-200 p-6 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold">Presencial</span>
+              <span class="text-xs text-slate-500"><i class="far fa-calendar-alt mr-1"></i> 15 Nov, 2026</span>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 mb-2">Summit de Innovación & Tecnología San Martín</h3>
+            <p class="text-xs text-slate-600 mb-4">Encuentro de profesionales, empresas y emprendimientos de la región.</p>
+          </div>
+          <button onclick="handleEventRegister('Summit Innovación')" class="w-full py-2.5 rounded-xl bg-nexus-blue text-white font-bold text-xs hover:bg-nexus-blueHover transition-colors flex items-center justify-center gap-2">
+            <i class="fas fa-qrcode"></i> Obtener mi Pase QR Gratis
+          </button>
+        </div>
+
+        <div class="bg-slate-50 rounded-2xl border border-slate-200 p-6 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="px-3 py-1 rounded-full bg-blue-100 text-blue-800 text-xs font-bold">Virtual</span>
+              <span class="text-xs text-slate-500"><i class="far fa-calendar-alt mr-1"></i> 20 Nov, 2026</span>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 mb-2">Taller: Marca Personal en Redes Profesionales</h3>
+            <p class="text-xs text-slate-600 mb-4">Aprende a optimizar tu presencia digital y destacar ante reclutadores.</p>
+          </div>
+          <button onclick="handleEventRegister('Taller Marca Personal')" class="w-full py-2.5 rounded-xl bg-nexus-blue text-white font-bold text-xs hover:bg-nexus-blueHover transition-colors flex items-center justify-center gap-2">
+            <i class="fas fa-qrcode"></i> Obtener mi Pase QR Gratis
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="bg-slate-900 text-slate-400 py-12 border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row justify-between items-center gap-6 pb-8 border-b border-slate-800">
+        
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-nexus-cyan to-nexus-blue p-0.5">
+            <div class="w-full h-full bg-slate-900 rounded-[10px] flex items-center justify-center">
+              <span class="text-nexus-cyan font-extrabold text-lg">N</span>
+            </div>
+          </div>
+          <span class="text-white font-extrabold text-xl">NEXUS<span class="text-nexus-cyan">-Work</span></span>
+        </div>
+
+        <div class="flex flex-wrap gap-6 text-xs font-medium">
+          <a href="#inicio" class="hover:text-white transition-colors">Inicio</a>
+          <a href="#profesionales" class="hover:text-white transition-colors">Talento</a>
+          <a href="#beneficios" class="hover:text-white transition-colors">Beneficios</a>
+          <a href="#empleos" class="hover:text-white transition-colors">Empleos</a>
+          <a href="nexus_work_admin_bi_dashboard.html" class="text-nexus-cyan hover:underline transition-colors font-bold"><i class="fas fa-chart-pie mr-1"></i> Consola Admin & BI</a>
+        </div>
+
+        <div class="flex items-center gap-4 text-slate-300">
+          <a href="https://linkedin.com" target="_blank" class="hover:text-nexus-cyan text-base transition-colors"><i class="fab fa-linkedin"></i></a>
+          <a href="https://facebook.com" target="_blank" class="hover:text-nexus-cyan text-base transition-colors"><i class="fab fa-facebook"></i></a>
+          <a href="https://instagram.com" target="_blank" class="hover:text-nexus-cyan text-base transition-colors"><i class="fab fa-instagram"></i></a>
+          <a href="https://twitter.com" target="_blank" class="hover:text-nexus-cyan text-base transition-colors"><i class="fab fa-x-twitter"></i></a>
+        </div>
+
+      </div>
+
+      <div class="pt-8 text-center text-xs text-slate-500">
+        © 2026 NEXUS-Work. Plataforma de networking profesional enfocada en el usuario. Todos los derechos reservados.
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== AUTHENTICATION MODAL ==================== -->
+  <div id="auth-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+    <div class="bg-white p-8 rounded-3xl border border-slate-200 max-w-md w-full relative shadow-2xl">
+      <button onclick="closeAuthModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700 p-1">
+        <i class="fas fa-times text-lg"></i>
+      </button>
+
+      <div class="text-center mb-6">
+        <h3 id="modal-title" class="text-2xl font-bold text-slate-900">Iniciar sesión en NEXUS-Work</h3>
+        <p class="text-xs text-slate-500 mt-1">Conecta con tu red profesional en segundos</p>
+      </div>
+
+      <div class="space-y-3 mb-6">
+        <button onclick="handleSocialAuth('Google')" class="w-full py-2.5 px-4 rounded-xl border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-bold flex items-center justify-center gap-3 transition-colors shadow-sm">
+          <i class="fab fa-google text-red-500 text-base"></i>
+          <span>Continuar con Google</span>
+        </button>
+        <button onclick="handleSocialAuth('Apple')" class="w-full py-2.5 px-4 rounded-xl border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-bold flex items-center justify-center gap-3 transition-colors shadow-sm">
+          <i class="fab fa-apple text-slate-900 text-base"></i>
+          <span>Continuar con Apple</span>
+        </button>
+      </div>
+
+      <div class="relative flex items-center justify-center mb-6">
+        <div class="border-t border-slate-200 w-full"></div>
+        <span class="bg-white px-3 text-[10px] text-slate-400 font-bold uppercase tracking-wider absolute">o usa tu email</span>
+      </div>
+
+      <form onsubmit="handleEmailAuth(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Correo Electrónico *</label>
+          <input type="email" required placeholder="tu@correo.com" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-nexus-blue">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Contraseña *</label>
+          <input type="password" required placeholder="••••••••" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-nexus-blue">
+        </div>
+
+        <button type="submit" class="w-full py-3 rounded-xl bg-nexus-blue hover:bg-nexus-blueHover text-white font-bold text-xs shadow-md transition-all">
+          Continuar →
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notifications Container -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- ==================== JAVASCRIPT ==================== -->
+  <script>
+    const mobileBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    if (mobileBtn) {
+      mobileBtn.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+      });
+    }
+
+    function scrollCarousel(direction) {
+      const container = document.getElementById('carousel-container');
+      container.scrollBy({ left: direction * 300, behavior: 'smooth' });
+    }
+
+    function switchTab(tabKey) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('bg-nexus-blue', 'text-white', 'shadow-md');
+        btn.classList.add('bg-slate-100', 'text-slate-700');
+      });
+
+      document.getElementById(`content-${tabKey}`).classList.remove('hidden');
+      const activeBtn = document.getElementById(`tab-${tabKey}`);
+      activeBtn.classList.remove('bg-slate-100', 'text-slate-700');
+      activeBtn.classList.add('bg-nexus-blue', 'text-white', 'shadow-md');
+    }
+
+    function openAuthModal(type) {
+      const modal = document.getElementById('auth-modal');
+      const title = document.getElementById('modal-title');
+      title.textContent = type === 'login' ? 'Iniciar sesión en NEXUS-Work' : 'Crear tu cuenta profesional';
+      modal.classList.remove('hidden');
+    }
+
+    function closeAuthModal() {
+      document.getElementById('auth-modal').classList.add('hidden');
+    }
+
+    function handleSocialAuth(provider) {
+      showToast(`Autenticando con ${provider}...`, 'info');
+      setTimeout(() => {
+        closeAuthModal();
+        window.location.href = 'nexus_work_dashboard_app.html';
+      }, 1000);
+    }
+
+    function handleEmailAuth(e) {
+      e.preventDefault();
+      showToast('¡Acceso correcto a NEXUS-Work!', 'success');
+      setTimeout(() => {
+        closeAuthModal();
+        window.location.href = 'nexus_work_dashboard_app.html';
+      }, 800);
+    }
+
+    function handleHeroSearch(e) {
+      e.preventDefault();
+      const title = document.getElementById('search-title').value || 'Profesionales';
+      const loc = document.getElementById('search-location').value;
+      showToast(`Buscando "${title}" en ${loc}...`, 'info');
+      setTimeout(() => {
+        window.location.href = 'nexus_work_dashboard_app.html';
+      }, 900);
+    }
+
+    function handleConnect(name) {
+      showToast(`Solicitud de conexión enviada a ${name}`, 'success');
+    }
+
+    function handleEventRegister(eventName) {
+      showToast(`¡Inscrito a "${eventName}"! Redirigiendo a tus entradas...`, 'success');
+      setTimeout(() => {
+        window.location.href = 'nexus_work_dashboard_app.html';
+      }, 1000);
+    }
+
+    function changeFontSize(size) {
+      const body = document.getElementById('app-body');
+      if (size === 'small') body.style.fontSize = '14px';
+      if (size === 'normal') body.style.fontSize = '16px';
+      if (size === 'large') body.style.fontSize = '18px';
+    }
+
+    function toggleHighContrast() {
+      document.body.classList.toggle('high-contrast');
+    }
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      
+      const borderColor = type === 'success' ? 'border-emerald-500' : 'border-nexus-blue';
+      const icon = type === 'success' ? 'fa-check-circle text-emerald-500' : 'fa-info-circle text-nexus-blue';
+
+      toast.className = `px-4 py-3 rounded-xl border ${borderColor} bg-white text-xs text-slate-800 flex items-center gap-3 shadow-xl pointer-events-auto transition-all duration-300 font-medium`;
+      toast.innerHTML = `<i class="fas ${icon} text-base"></i><span>${message}</span>`;
+
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEXUS-Work | Registro & Onboarding Profesional</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
+          colors: {
+            nexus: {
+              blue: '#0A66C2',
+              blueHover: '#084E96',
+              cyan: '#00D2FF',
+              bgLight: '#F8FAFC',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-nexus-bgLight text-slate-800 font-sans antialiased min-h-screen flex flex-col justify-between selection:bg-nexus-cyan selection:text-slate-900">
+
+  <!-- NAVBAR DE NAVEGACIÓN -->
+  <header class="bg-white/90 backdrop-blur-md border-b border-slate-200 py-4 px-6 shadow-sm sticky top-0 z-40">
+    <div class="max-w-4xl mx-auto flex items-center justify-between">
+      <a href="nexus_work_landing_page.html" class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-nexus-cyan to-nexus-blue p-0.5 shadow-sm">
+          <div class="w-full h-full bg-slate-900 rounded-[10px] flex items-center justify-center">
+            <span class="text-nexus-cyan font-extrabold text-xl">N</span>
+          </div>
+        </div>
+        <div>
+          <span class="text-2xl font-extrabold tracking-tight text-slate-900">NEXUS<span class="text-nexus-blue">-Work</span></span>
+          <span class="block text-[10px] uppercase tracking-widest text-slate-500 font-semibold">Conecta • Desarrolla • Avanza</span>
+        </div>
+      </a>
+      <div id="flow-indicator" class="text-xs font-bold text-slate-500">
+        Flujo interactivo: <span id="flow-status" class="text-nexus-blue">Registro</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENEDOR PRINCIPAL DINÁMICO -->
+  <main class="py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center flex-1">
+    
+    <!-- ==================== VISTA 1: FORMULARIO DE REGISTRO ==================== -->
+    <div id="view-register" class="max-w-xl w-full bg-white rounded-3xl border border-slate-200/90 shadow-xl p-8 sm:p-10 transition-all duration-300">
+      
+      <div class="text-center mb-8">
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900">Crea tu cuenta profesional</h1>
+        <p class="text-xs sm:text-sm text-slate-500 mt-2">Únete a la red regional y accede a empleos, eventos con QR y networking de calidad.</p>
+      </div>
+
+      <!-- BOTONES SOCIALES -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+        <button type="button" onclick="handleSocialAuth('Google')" class="py-2.5 px-4 rounded-xl border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-bold flex items-center justify-center gap-3 transition-colors shadow-sm">
+          <i class="fab fa-google text-red-500 text-base"></i>
+          <span>Google</span>
+        </button>
+        <button type="button" onclick="handleSocialAuth('Apple')" class="py-2.5 px-4 rounded-xl border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-bold flex items-center justify-center gap-3 transition-colors shadow-sm">
+          <i class="fab fa-apple text-slate-900 text-base"></i>
+          <span>Apple ID</span>
+        </button>
+      </div>
+
+      <div class="relative flex items-center justify-center mb-6">
+        <div class="border-t border-slate-200 w-full"></div>
+        <span class="bg-white px-3 text-[10px] text-slate-400 font-bold uppercase tracking-wider absolute">o regístrate con tu correo</span>
+      </div>
+
+      <!-- FORMULARIO -->
+      <form onsubmit="handleRegisterSubmit(event)" class="space-y-4">
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Nombres *</label>
+            <input type="text" id="reg-name" required placeholder="Ej. Carlos Alberto" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-nexus-blue font-medium">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Apellidos *</label>
+            <input type="text" required placeholder="Ej. Mendoza Silva" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-nexus-blue font-medium">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Correo Electrónico *</label>
+          <input type="email" required placeholder="tucorreo@dominio.com" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-nexus-blue font-medium">
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Contraseña *</label>
+            <input type="password" required placeholder="Mínimo 8 caracteres" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-nexus-blue font-medium">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Ciudad / Región *</label>
+            <input type="text" required value="Tarapoto, Perú" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-nexus-blue font-medium">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Área o Especialidad Principal *</label>
+          <select class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-nexus-blue font-medium">
+            <option>Ingeniería de Software / Tecnologías</option>
+            <option>Recursos Humanos & Selección</option>
+            <option>Marketing & Estrategia Digital</option>
+            <option>Salud & Bienestar Ocupacional</option>
+            <option>Arquitectura & Construcción</option>
+          </select>
+        </div>
+
+        <div class="flex items-center gap-2 pt-2">
+          <input type="checkbox" id="terms" required class="w-4 h-4 text-nexus-blue border-slate-300 rounded focus:ring-nexus-blue">
+          <label for="terms" class="text-[11px] text-slate-600">Acepto los Términos de Servicio y la política de privacidad de datos.</label>
+        </div>
+
+        <button type="submit" class="w-full py-3.5 rounded-xl bg-nexus-blue hover:bg-nexus-blueHover text-white font-bold text-xs shadow-md transition-all mt-4">
+          Completar Registro y Crear Perfil →
+        </button>
+
+      </form>
+    </div>
+
+    <!-- ==================== VISTA 2: ONBOARDING (PASOS 1, 2 Y 3) ==================== -->
+    <div id="view-onboarding" class="max-w-xl w-full bg-white rounded-3xl border border-slate-200 shadow-xl p-8 sm:p-10 text-center relative overflow-hidden hidden transition-all duration-300">
+      
+      <!-- Indicador de pasos -->
+      <div class="text-xs font-bold text-slate-400 mb-4">
+        Paso <span id="current-step-num" class="text-nexus-blue">1</span> de 3
+      </div>
+
+      <!-- PASO 1 -->
+      <div id="onboard-step-1" class="onboard-pane space-y-6">
+        <div class="w-20 h-20 bg-blue-50 text-nexus-blue rounded-3xl mx-auto flex items-center justify-center text-3xl shadow-inner">
+          <i class="fas fa-hand-sparkles"></i>
+        </div>
+        <div>
+          <h2 id="welcome-title" class="text-2xl sm:text-3xl font-extrabold text-slate-900">¡Bienvenido a la comunidad!</h2>
+          <p class="text-xs sm:text-sm text-slate-600 mt-2">Configuraremos tus preferencias en menos de 1 minuto para mostrarte vacantes y eventos relevantes en tu región.</p>
+        </div>
+        <button onclick="nextOnboardingStep(2)" class="w-full py-3.5 rounded-xl bg-nexus-blue hover:bg-nexus-blueHover text-white font-bold text-xs shadow-md transition-all">
+          Continuar con configuración rápida →
+        </button>
+      </div>
+
+      <!-- PASO 2 -->
+      <div id="onboard-step-2" class="onboard-pane space-y-6 hidden">
+        <div class="w-20 h-20 bg-cyan-50 text-cyan-600 rounded-3xl mx-auto flex items-center justify-center text-3xl shadow-inner">
+          <i class="fas fa-bullseye"></i>
+        </div>
+        <div>
+          <h2 class="text-2xl font-extrabold text-slate-900">¿Qué buscas principalmente?</h2>
+          <p class="text-xs sm:text-sm text-slate-600 mt-1">Selecciona tus objetivos principales en la plataforma.</p>
+        </div>
+        <div class="grid grid-cols-1 gap-3 text-left">
+          <label class="flex items-center gap-3 p-3 rounded-xl border border-slate-200 hover:border-nexus-blue cursor-pointer bg-slate-50 transition-colors">
+            <input type="checkbox" checked class="w-4 h-4 text-nexus-blue rounded">
+            <span class="text-xs font-bold text-slate-800">Encontrar empleo formal o prácticas</span>
+          </label>
+          <label class="flex items-center gap-3 p-3 rounded-xl border border-slate-200 hover:border-nexus-blue cursor-pointer bg-slate-50 transition-colors">
+            <input type="checkbox" checked class="w-4 h-4 text-nexus-blue rounded">
+            <span class="text-xs font-bold text-slate-800">Expandir mi red de contactos profesionales</span>
+          </label>
+          <label class="flex items-center gap-3 p-3 rounded-xl border border-slate-200 hover:border-nexus-blue cursor-pointer bg-slate-50 transition-colors">
+            <input type="checkbox" class="w-4 h-4 text-nexus-blue rounded">
+            <span class="text-xs font-bold text-slate-800">Asistir a conferencias locales con pase QR</span>
+          </label>
+        </div>
+        <button onclick="nextOnboardingStep(3)" class="w-full py-3.5 rounded-xl bg-nexus-blue hover:bg-nexus-blueHover text-white font-bold text-xs shadow-md transition-all">
+          Siguiente paso →
+        </button>
+      </div>
+
+      <!-- PASO 3 -->
+      <div id="onboard-step-3" class="onboard-pane space-y-6 hidden">
+        <div class="w-20 h-20 bg-emerald-50 text-emerald-600 rounded-3xl mx-auto flex items-center justify-center text-3xl shadow-inner">
+          <i class="fas fa-check-circle"></i>
+        </div>
+        <div>
+          <h2 class="text-2xl font-extrabold text-slate-900">¡Todo listo, tu perfil está activo!</h2>
+          <p class="text-xs sm:text-sm text-slate-600 mt-2">Ya puedes explorar vacantes en Tarapoto y conectar con colegas de tu especialidad.</p>
+        </div>
+        <button onclick="finishFlow()" class="w-full py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition-all">
+          Ir a mi Panel Principal (Dashboard) 🚀
+        </button>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- PIE DE PÁGINA -->
+  <footer class="bg-slate-900 text-slate-400 py-6 text-center text-xs">
+    <p>© 2026 NEXUS-Work. Flujo completo de Registro y Onboarding interactivo.</p>
+  </footer>
+
+  <!-- Script de Autenticación Real Firebase -->
+  <script type="module">
+    import { 
+      auth, 
+      db, 
+      googleProvider, 
+      createUserWithEmailAndPassword, 
+      signInWithPopup, 
+      doc, 
+      setDoc 
+    } from "./firebase-config.js";
+
+    // 1. Registro Manual con Correo y Contraseña
+    window.handleRegisterSubmit = async function(event) {
+      event.preventDefault();
+
+      const nameInput = document.getElementById('reg-name').value.trim();
+      const emailInput = document.querySelector('input[type="email"]').value.trim();
+      const passwordInput = document.querySelector('input[type="password"]').value;
+      const cityInput = document.querySelector('input[value*="Tarapoto"]').value.trim();
+      const specialtySelect = document.querySelector('select').value;
+
+      try {
+        // Registra el usuario en Firebase Authentication
+        const userCredential = await createUserWithEmailAndPassword(auth, emailInput, passwordInput);
+        const user = userCredential.user;
+
+        // Guarda su información de perfil en Firestore
+        await setDoc(doc(db, "users", user.uid), {
+          uid: user.uid,
+          name: nameInput,
+          email: emailInput,
+          city: cityInput,
+          specialty: specialtySelect,
+          role: "user",
+          verified: true,
+          createdAt: new Date().toISOString()
+        });
+
+        // Pasa al flujo de Onboarding interactivo
+        document.getElementById('view-register').classList.add('hidden');
+        document.getElementById('view-onboarding').classList.remove('hidden');
+        document.getElementById('flow-status').textContent = 'Onboarding';
+        document.getElementById('welcome-title').textContent = `¡Bienvenido a la comunidad, ${nameInput.split(' ')[0]}!`;
+      } catch (error) {
+        alert("Error de registro: " + error.message);
+      }
+    };
+
+    // 2. Registro / Acceso con cuenta real de Google
+    window.handleSocialAuth = async function(provider) {
+      if (provider === 'Google') {
+        try {
+          const result = await signInWithPopup(auth, googleProvider);
+          const user = result.user;
+
+          // Guarda o actualiza su perfil en Firestore
+          await setDoc(doc(db, "users", user.uid), {
+            uid: user.uid,
+            name: user.displayName || "Colega",
+            email: user.email,
+            photoURL: user.photoURL,
+            role: "user",
+            verified: true,
+            createdAt: new Date().toISOString()
+          }, { merge: true });
+
+          document.getElementById('view-register').classList.add('hidden');
+          document.getElementById('view-onboarding').classList.remove('hidden');
+          document.getElementById('flow-status').textContent = 'Onboarding';
+          document.getElementById('welcome-title').textContent = `¡Bienvenido, ${(user.displayName || "Colega").split(' ')[0]}!`;
+        } catch (error) {
+          alert("Error con Google: " + error.message);
+        }
+      } else {
+        alert("Autenticación con Apple ID en desarrollo.");
+      }
+    };
+
+    // Control de pantallas del Onboarding
+    window.nextOnboardingStep = function(step) {
+      document.querySelectorAll('.onboard-pane').forEach(el => el.classList.add('hidden'));
+      document.getElementById(`onboard-step-${step}`).classList.remove('hidden');
+      document.getElementById('current-step-num').textContent = step;
+    };
+
+    window.finishFlow = function() {
+      window.location.href = 'nexus_work_dashboard_app.html';
+    };
+  </script>
+</body>
+</html>

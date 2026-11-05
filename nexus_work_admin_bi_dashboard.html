@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEXUS-Work | Panel Administrativo & Business Intelligence</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            nexus: {
+              blue: '#0A66C2',       /* Azul corporativo formal */
+              blueHover: '#084E96',
+              cyan: '#00D2FF',       /* Cian neón del isotipo NEXUS */
+              cyanHover: '#00B4DB',
+              bgLight: '#F8FAFC',    /* Fondo principal descansado */
+              dark: '#0F172A',
+              border: '#E2E8F0'
+            }
+          },
+          boxShadow: {
+            subtle: '0 4px 20px -2px rgba(10, 102, 194, 0.06)',
+            cardHover: '0 12px 30px -5px rgba(15, 23, 42, 0.08)'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Scrollbar personalizada */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F1F5F9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #CBD5E1;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #0A66C2;
+    }
+
+    /* WCAG 2.1 AA Alto Contraste */
+    body.high-contrast {
+      background-color: #FFFFFF !important;
+      color: #000000 !important;
+    }
+    body.high-contrast .bg-white,
+    body.high-contrast .bg-slate-50,
+    body.high-contrast .bg-slate-100,
+    body.high-contrast .bg-slate-900 {
+      background-color: #FFFFFF !important;
+      border-color: #000000 !important;
+      color: #000000 !important;
+    }
+    body.high-contrast button, 
+    body.high-contrast input, 
+    body.high-contrast select {
+      border: 2px solid #000000 !important;
+      color: #000000 !important;
+    }
+    body.high-contrast .text-slate-400,
+    body.high-contrast .text-slate-500,
+    body.high-contrast .text-slate-600 {
+      color: #000000 !important;
+      font-weight: 700 !important;
+    }
+
+    .view-pane {
+      animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body id="app-body" class="bg-nexus-bgLight text-slate-800 font-sans antialiased selection:bg-nexus-cyan selection:text-slate-900 min-h-screen flex flex-col text-[14px]">
+
+  <!-- ==================== ACCESSIBILITY TOOLBAR ==================== -->
+  <div id="accessibility-bar" class="bg-slate-900 text-slate-300 text-xs py-1.5 px-4 sm:px-8 flex justify-between items-center border-b border-slate-800 shrink-0">
+    <div class="flex items-center gap-2">
+      <i class="fa-solid fa-universal-access text-nexus-cyan text-sm"></i>
+      <span class="font-medium hidden sm:inline">Módulo Administrativo & BI • Accesibilidad (WCAG 2.1 AA)</span>
+      <span class="font-medium sm:hidden">Admin BI WCAG</span>
+    </div>
+    <div class="flex items-center gap-2 sm:gap-3">
+      <span class="text-slate-400 text-[11px] hidden md:inline">Texto:</span>
+      <button onclick="changeFontSize('large')" class="hover:text-nexus-cyan font-bold px-1.5 py-0.5 rounded text-xs bg-slate-800" title="Aumentar fuente">A+</button>
+      <button onclick="changeFontSize('normal')" class="hover:text-nexus-cyan font-bold px-1.5 py-0.5 rounded text-xs bg-slate-800" title="Fuente normal">A</button>
+      <button onclick="changeFontSize('small')" class="hover:text-nexus-cyan font-bold px-1.5 py-0.5 rounded text-xs bg-slate-800" title="Disminuir fuente">A-</button>
+      <span class="text-slate-700">|</span>
+      <button onclick="toggleHighContrast()" class="hover:text-nexus-cyan px-2 py-0.5 rounded bg-slate-800 border border-slate-700 font-semibold text-[11px] flex items-center gap-1.5">
+        <i class="fas fa-adjust text-nexus-cyan"></i> Alto Contraste
+      </button>
+    </div>
+  </div>
+
+  <!-- ==================== TOP NAVIGATION HEADER ==================== -->
+  <header class="bg-white/95 backdrop-blur-md border-b border-slate-200/90 py-3.5 px-4 sm:px-8 sticky top-0 z-40 shadow-sm shrink-0">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+      
+      <!-- Brand & Badge Admin -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-nexus-cyan to-nexus-blue p-0.5 shadow-sm">
+          <div class="w-full h-full bg-slate-900 rounded-[10px] flex items-center justify-center">
+            <span class="text-nexus-cyan font-extrabold text-xl">N</span>
+          </div>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-xl font-extrabold tracking-tight text-slate-900">NEXUS<span class="text-nexus-blue">-Work</span></span>
+            <span class="px-2 py-0.5 rounded-md bg-purple-100 text-purple-700 text-[10px] font-extrabold uppercase tracking-wide border border-purple-200">
+              Admin & BI Console
+            </span>
+          </div>
+          <span class="block text-[10px] uppercase tracking-widest text-slate-500 font-bold">Gestión de Gobernanza, Mercado y Seguridad</span>
+        </div>
+      </div>
+
+      <!-- Live System Status & Auditor Profile -->
+      <div class="flex items-center gap-4">
+        <div class="hidden md:flex items-center gap-3 bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-xl text-xs">
+          <div class="flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span class="font-bold text-slate-700">Uptime: 99.98%</span>
+          </div>
+          <span class="text-slate-300">|</span>
+          <div class="flex items-center gap-1 text-slate-500 font-medium">
+            <i class="fas fa-bolt text-amber-500"></i> Latencia: <span class="text-slate-900 font-bold" id="latency-metric">0.82s</span>
+            <span class="text-[10px] text-emerald-600 font-bold">(Rendimiento Óptimo)</span>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3 pl-3 border-l border-slate-200">
+          <div class="text-right hidden sm:block">
+            <span class="block text-xs font-extrabold text-slate-900">Ing. Alfredo Carpio</span>
+            <span class="block text-[10px] text-slate-500 font-semibold">Superadministrador • IHC-UPN</span>
+          </div>
+          <div class="w-9 h-9 rounded-xl bg-slate-900 text-nexus-cyan flex items-center justify-center font-extrabold text-xs shadow-sm ring-2 ring-nexus-blue/20">
+            ADM
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ==================== LAYOUT PRINCIPAL: SIDEBAR + VIEWPORT ==================== -->
+  <div class="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 flex flex-col md:flex-row gap-6">
+    
+    <!-- ==================== SIDEBAR DE CONTROL (ARQUITECTURA DE INFORMACIÓN) ==================== -->
+    <aside class="w-full md:w-64 shrink-0 space-y-4">
+      <div class="bg-white rounded-3xl border border-slate-200/90 p-4 shadow-sm">
+        <span class="block text-[10px] font-extrabold uppercase tracking-widest text-slate-400 mb-3 px-3">Módulos Administrativos</span>
+        
+        <nav class="space-y-1">
+          <button onclick="switchAdminTab('kpis')" id="btn-tab-kpis" class="admin-nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-xs font-bold transition-all bg-nexus-blue text-white shadow-sm">
+            <div class="flex items-center gap-2.5">
+              <i class="fas fa-chart-pie text-sm"></i>
+              <span>Resumen Ejecutivo</span>
+            </div>
+            <span class="text-[10px] bg-white/20 text-white px-2 py-0.5 rounded-full font-extrabold">2026</span>
+          </button>
+
+          <button onclick="switchAdminTab('bi-jobs')" id="btn-tab-bi-jobs" class="admin-nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-xs font-bold transition-all text-slate-600 hover:bg-slate-100">
+            <div class="flex items-center gap-2.5">
+              <i class="fas fa-chart-line text-sm text-nexus-blue"></i>
+              <span>Demanda Laboral & BI</span>
+            </div>
+            <span class="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold">Mercado</span>
+          </button>
+
+          <button onclick="switchAdminTab('identity')" id="btn-tab-identity" class="admin-nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-xs font-bold transition-all text-slate-600 hover:bg-slate-100">
+            <div class="flex items-center gap-2.5">
+              <i class="fas fa-id-card-clip text-sm text-purple-600"></i>
+              <span>Validación Identidad</span>
+            </div>
+            <span id="badge-verif-count" class="text-[10px] bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full font-extrabold">3</span>
+          </button>
+
+          <button onclick="switchAdminTab('moderation')" id="btn-tab-moderation" class="admin-nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-xs font-bold transition-all text-slate-600 hover:bg-slate-100">
+            <div class="flex items-center gap-2.5">
+              <i class="fas fa-shield-virus text-sm text-red-500"></i>
+              <span>Moderación & Spam</span>
+            </div>
+            <span id="badge-mod-count" class="text-[10px] bg-red-100 text-red-700 px-2 py-0.5 rounded-full font-extrabold">2</span>
+          </button>
+
+          <button onclick="switchAdminTab('events-audit')" id="btn-tab-events-audit" class="admin-nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-xs font-bold transition-all text-slate-600 hover:bg-slate-100">
+            <div class="flex items-center gap-2.5">
+              <i class="fas fa-qrcode text-sm text-nexus-cyan"></i>
+              <span>Eventos & Check-in QR</span>
+            </div>
+            <span class="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full font-bold">Puerta</span>
+          </button>
+        </nav>
+
+        <div class="mt-6 pt-4 border-t border-slate-100">
+          <div class="p-3 bg-slate-50 rounded-2xl border border-slate-100 text-[11px] text-slate-500 space-y-1">
+            <div class="font-bold text-slate-800 flex items-center gap-1.5">
+              <i class="fas fa-server text-nexus-blue"></i> Base de Datos
+            </div>
+            <div>San Martín Node 01 (Activo)</div>
+            <div class="text-[10px] text-emerald-600 font-bold">Backup: Activo 02:00 AM (Automático)</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ==================== VIEWPORT PRINCIPAL DINÁMICO ==================== -->
+    <main class="flex-1 space-y-6 overflow-hidden">
+      
+      <!-- ========================================================================= -->
+      <!-- PESTAÑA 1: RESUMEN EJECUTIVO & KPIS OPERATIVOS                             -->
+      <!-- ========================================================================= -->
+      <section id="pane-kpis" class="view-pane space-y-6">
+        
+        <!-- Tarjeta de Bienvenida y Filtro Geográfico -->
+        <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-nexus-blue rounded-3xl p-6 text-white shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <span class="px-2.5 py-0.5 rounded-full bg-nexus-cyan/20 border border-nexus-cyan/40 text-nexus-cyan text-[10px] font-extrabold uppercase tracking-widest">
+              Gobernanza & Métricas Globales
+            </span>
+            <h1 class="text-xl sm:text-2xl font-extrabold mt-1">Panel de Control de Decisiones NEXUS-Work</h1>
+            <p class="text-xs text-slate-300 mt-1">Supervisión integral de usuarios, empleabilidad, calidad de interacciones y seguridad.</p>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <select class="bg-white/10 border border-white/20 text-white text-xs font-bold px-3 py-2 rounded-xl focus:outline-none focus:bg-slate-900">
+              <option value="tarapoto">Región San Martín (Tarapoto / Moyobamba)</option>
+              <option value="lima">Sede Lima Metropolitana</option>
+              <option value="all">Consolidado Nacional Perú</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 5 Tarjetas de Métricas Macro (KPIs) -->
+        <div class="grid grid-cols-2 lg:grid-cols-5 gap-3.5">
+          
+          <div class="bg-white p-4 rounded-3xl border border-slate-200 shadow-sm">
+            <div class="flex items-center justify-between text-slate-500">
+              <span class="text-[11px] font-bold">Usuarios Totales</span>
+              <div class="w-7 h-7 rounded-lg bg-blue-50 text-nexus-blue flex items-center justify-center text-xs">
+                <i class="fas fa-users"></i>
+              </div>
+            </div>
+            <div class="text-2xl font-extrabold text-slate-900 mt-1.5" id="metric-total-users">2,485</div>
+            <div class="text-[10px] text-emerald-600 font-bold mt-1">
+              <i class="fas fa-arrow-up"></i> +14.2% este mes
+            </div>
+          </div>
+
+          <div class="bg-white p-4 rounded-3xl border border-slate-200 shadow-sm">
+            <div class="flex items-center justify-between text-slate-500">
+              <span class="text-[11px] font-bold">Cuentas Verificadas</span>
+              <div class="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center text-xs">
+                <i class="fas fa-user-check"></i>
+              </div>
+            </div>
+            <div class="text-2xl font-extrabold text-slate-900 mt-1.5">1,820</div>
+            <div class="text-[10px] text-slate-500 font-semibold mt-1">
+              73.2% tasa de validación
+            </div>
+          </div>
+
+          <div class="bg-white p-4 rounded-3xl border border-slate-200 shadow-sm">
+            <div class="flex items-center justify-between text-slate-500">
+              <span class="text-[11px] font-bold">Vacantes Activas</span>
+              <div class="w-7 h-7 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center text-xs">
+                <i class="fas fa-briefcase"></i>
+              </div>
+            </div>
+            <div class="text-2xl font-extrabold text-slate-900 mt-1.5">148</div>
+            <div class="text-[10px] text-emerald-600 font-bold mt-1">
+              34 empresas locales
+            </div>
+          </div>
+
+          <div class="bg-white p-4 rounded-3xl border border-slate-200 shadow-sm">
+            <div class="flex items-center justify-between text-slate-500">
+              <span class="text-[11px] font-bold">Pases QR Emitidos</span>
+              <div class="w-7 h-7 rounded-lg bg-cyan-50 text-nexus-cyan flex items-center justify-center text-xs">
+                <i class="fas fa-qrcode"></i>
+              </div>
+            </div>
+            <div class="text-2xl font-extrabold text-slate-900 mt-1.5">840</div>
+            <div class="text-[10px] text-slate-500 font-semibold mt-1">
+              91% asistencia estimada
+            </div>
+          </div>
+
+          <div class="bg-white p-4 rounded-3xl border border-slate-200 shadow-sm col-span-2 lg:col-span-1">
+            <div class="flex items-center justify-between text-slate-500">
+              <span class="text-[11px] font-bold">Tiempo de Carga</span>
+              <div class="w-7 h-7 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center text-xs">
+                <i class="fas fa-stopwatch"></i>
+              </div>
+            </div>
+            <div class="text-2xl font-extrabold text-slate-900 mt-1.5">0.82 s</div>
+            <div class="text-[10px] text-emerald-600 font-bold mt-1">
+              <i class="fas fa-check"></i> Carga Ultra Rápida
+            </div>
+          </div>
+
+        </div>
+
+        <!-- 2 Bloques: Tasa de Retención (Problema Central Ishikawa) vs Tipo de Usuarios -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          
+          <div class="lg:col-span-7 bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h3 class="text-xs font-extrabold text-slate-900 uppercase tracking-wider">Mitigación del Abandono (Fidelización)</h3>
+                <p class="text-[11px] text-slate-500">Retención de usuarios a 30 días tras implementar Onboarding en 1 clic y Eventos QR</p>
+              </div>
+              <span class="text-xs font-extrabold text-nexus-blue bg-blue-50 px-2.5 py-1 rounded-xl">+34% vs LinkedIn local</span>
+            </div>
+
+            <!-- Gráfico SVG Curva de Retención -->
+            <div class="w-full h-44 flex items-end">
+              <svg class="w-full h-full" viewBox="0 0 500 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Grid lines -->
+                <line x1="0" y1="30" x2="500" y2="30" stroke="#F1F5F9" stroke-width="1"/>
+                <line x1="0" y1="70" x2="500" y2="70" stroke="#F1F5F9" stroke-width="1"/>
+                <line x1="0" y1="110" x2="500" y2="110" stroke="#F1F5F9" stroke-width="1"/>
+                <!-- Plataforma Anterior / Genérica (Gris) -->
+                <path d="M10 40 Q 120 120, 250 135 T 490 140" stroke="#CBD5E1" stroke-width="2.5" stroke-dasharray="4 4" fill="none"/>
+                <!-- NEXUS-Work (Curva Azul con gradiente) -->
+                <path d="M10 50 C 120 40, 200 45, 300 55 C 400 65, 450 70, 490 72" stroke="#0A66C2" stroke-width="3.5" fill="none"/>
+                <circle cx="10" cy="50" r="4" fill="#0A66C2"/>
+                <circle cx="250" cy="50" r="4" fill="#00D2FF"/>
+                <circle cx="490" cy="72" r="5" fill="#0A66C2"/>
+              </svg>
+            </div>
+
+            <div class="flex items-center justify-between text-[11px] text-slate-500 pt-2 border-t border-slate-100">
+              <div class="flex items-center gap-2">
+                <span class="w-3 h-1 bg-nexus-blue rounded-full"></span>
+                <span class="font-bold text-slate-700">NEXUS-Work (Retención 68%)</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="w-3 h-1 bg-slate-300 rounded-full"></span>
+                <span>Plataformas Tradicionales (34%)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="lg:col-span-5 bg-white p-5 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between">
+            <div>
+              <h3 class="text-xs font-extrabold text-slate-900 uppercase tracking-wider mb-1">Distribución de Usuarios (Comunidad)</h3>
+              <p class="text-[11px] text-slate-500 mb-4">Segmentación por perfiles registrados en la región</p>
+
+              <div class="space-y-3">
+                <div>
+                  <div class="flex justify-between text-xs font-bold mb-1">
+                    <span class="text-slate-700">Egresados & Jóvenes Profesionales</span>
+                    <span class="text-nexus-blue">52% (1,292)</span>
+                  </div>
+                  <div class="w-full bg-slate-100 rounded-full h-2">
+                    <div class="bg-nexus-blue h-2 rounded-full" style="width: 52%"></div>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="flex justify-between text-xs font-bold mb-1">
+                    <span class="text-slate-700">Reclutadores & Empresas</span>
+                    <span class="text-purple-600">26% (646)</span>
+                  </div>
+                  <div class="w-full bg-slate-100 rounded-full h-2">
+                    <div class="bg-purple-600 h-2 rounded-full" style="width: 26%"></div>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="flex justify-between text-xs font-bold mb-1">
+                    <span class="text-slate-700">Freelancers & Consultores</span>
+                    <span class="text-nexus-cyan">22% (547)</span>
+                  </div>
+                  <div class="w-full bg-slate-100 rounded-full h-2">
+                    <div class="bg-cyan-500 h-2 rounded-full" style="width: 22%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="p-3 bg-blue-50/70 border border-blue-200/60 rounded-2xl text-[11px] text-nexus-blue mt-4 font-semibold">
+              <i class="fas fa-lightbulb mr-1"></i> El 82% de las postulaciones son realizadas por egresados con CV digital verificado.
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- ========================================================================= -->
+      <!-- PESTAÑA 2: DEMANDA LABORAL & BUSINESS INTELLIGENCE (TOMA DE DECISIONES)     -->
+      <!-- ========================================================================= -->
+      <section id="pane-bi-jobs" class="view-pane hidden space-y-6">
+        
+        <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <span class="text-xs font-bold text-nexus-blue uppercase tracking-wider">Business Intelligence para Formación y Contratación</span>
+            <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 mt-0.5">Demanda del Mercado Laboral en San Martín</h2>
+            <p class="text-xs text-slate-500 mt-1">Análisis cuantitativo de vacantes publicadas vs. postulantes disponibles para orientar planes de estudio.</p>
+          </div>
+          <button onclick="exportBiReport()" class="px-4 py-2.5 rounded-xl border border-nexus-blue text-nexus-blue hover:bg-nexus-blue hover:text-white text-xs font-bold transition-all shadow-sm flex items-center gap-2">
+            <i class="fas fa-file-excel"></i> Exportar Informe BI
+          </button>
+        </div>
+
+        <!-- Gráfico de Barras: Carreras y Especialidades más Demandadas -->
+        <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+          <div class="flex items-center justify-between mb-6">
+            <div>
+              <h3 class="text-sm font-extrabold text-slate-900">Especialidades con Mayor Volumen de Vacantes</h3>
+              <p class="text-xs text-slate-500">Comparativa de ofertas registradas en los últimos 60 días</p>
+            </div>
+            <span class="text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-xl">Actualizado hoy</span>
+          </div>
+
+          <div class="space-y-4">
+            <!-- Puesto 1 -->
+            <div>
+              <div class="flex justify-between text-xs font-bold mb-1">
+                <span class="text-slate-800">1. Desarrollo de Software & Tecnologías Web</span>
+                <span class="text-nexus-blue">54 vacantes (S/ 3,800 prom.)</span>
+              </div>
+              <div class="w-full bg-slate-100 rounded-full h-3">
+                <div class="bg-nexus-blue h-3 rounded-full" style="width: 88%"></div>
+              </div>
+            </div>
+
+            <!-- Puesto 2 -->
+            <div>
+              <div class="flex justify-between text-xs font-bold mb-1">
+                <span class="text-slate-800">2. Gestión de Recursos Humanos & Selección</span>
+                <span class="text-purple-600">38 vacantes (S/ 3,200 prom.)</span>
+              </div>
+              <div class="w-full bg-slate-100 rounded-full h-3">
+                <div class="bg-purple-600 h-3 rounded-full" style="width: 65%"></div>
+              </div>
+            </div>
+
+            <!-- Puesto 3 -->
+            <div>
+              <div class="flex justify-between text-xs font-bold mb-1">
+                <span class="text-slate-800">3. Marketing Digital & Estrategia Comercial</span>
+                <span class="text-cyan-600">29 vacantes (S/ 2,400 prom.)</span>
+              </div>
+              <div class="w-full bg-slate-100 rounded-full h-3">
+                <div class="bg-cyan-500 h-3 rounded-full" style="width: 48%"></div>
+              </div>
+            </div>
+
+            <!-- Puesto 4 -->
+            <div>
+              <div class="flex justify-between text-xs font-bold mb-1">
+                <span class="text-slate-800">4. Arquitectura & Supervisión de Obras</span>
+                <span class="text-amber-600">18 vacantes (S/ 3,600 prom.)</span>
+              </div>
+              <div class="w-full bg-slate-100 rounded-full h-3">
+                <div class="bg-amber-500 h-3 rounded-full" style="width: 32%"></div>
+              </div>
+            </div>
+
+            <!-- Puesto 5 -->
+            <div>
+              <div class="flex justify-between text-xs font-bold mb-1">
+                <span class="text-slate-800">5. Salud Ocupacional & Seguridad Laboral</span>
+                <span class="text-emerald-600">14 vacantes (S/ 4,100 prom.)</span>
+              </div>
+              <div class="w-full bg-slate-100 rounded-full h-3">
+                <div class="bg-emerald-500 h-3 rounded-full" style="width: 24%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabla de Insights: Brecha de Habilidades (Skills Gap) -->
+        <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+          <h3 class="text-sm font-extrabold text-slate-900 mb-2">Brecha de Talento Regional (Skills Gap)</h3>
+          <p class="text-xs text-slate-500 mb-4">Competencias solicitadas por las empresas que presentan escasez de postulantes calificados.</p>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-xs text-left">
+              <thead class="bg-slate-50 text-slate-500 font-bold uppercase text-[10px] border-b border-slate-200">
+                <tr>
+                  <th class="py-3 px-4">Habilidad / Requisito</th>
+                  <th class="py-3 px-4">Demanda Empresas</th>
+                  <th class="py-3 px-4">Postulantes Aptos</th>
+                  <th class="py-3 px-4">Nivel de Escasez</th>
+                  <th class="py-3 px-4">Acción Recomendada</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 font-medium">
+                <tr>
+                  <td class="py-3 px-4 font-bold text-slate-900">React.js & Node.js Backend</td>
+                  <td class="py-3 px-4">42 ofertas</td>
+                  <td class="py-3 px-4">16 postulantes</td>
+                  <td class="py-3 px-4"><span class="px-2 py-0.5 rounded-full bg-red-100 text-red-700 font-bold text-[10px]">Alta (62%)</span></td>
+                  <td class="py-3 px-4 text-nexus-blue font-bold">Promover Bootcamp Regional</td>
+                </tr>
+                <tr>
+                  <td class="py-3 px-4 font-bold text-slate-900">Inglés Técnico B2</td>
+                  <td class="py-3 px-4">35 ofertas</td>
+                  <td class="py-3 px-4">12 postulantes</td>
+                  <td class="py-3 px-4"><span class="px-2 py-0.5 rounded-full bg-red-100 text-red-700 font-bold text-[10px]">Alta (66%)</span></td>
+                  <td class="py-3 px-4 text-nexus-blue font-bold">Alianza con Centro de Idiomas</td>
+                </tr>
+                <tr>
+                  <td class="py-3 px-4 font-bold text-slate-900">Diseño UI/UX Accesible (WCAG)</td>
+                  <td class="py-3 px-4">19 ofertas</td>
+                  <td class="py-3 px-4">9 postulantes</td>
+                  <td class="py-3 px-4"><span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 font-bold text-[10px]">Media (52%)</span></td>
+                  <td class="py-3 px-4 text-nexus-blue font-bold">Taller en próximo Summit</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ========================================================================= -->
+      <!-- PESTAÑA 3: VALIDACIÓN DE IDENTIDAD & PERFILES                              -->
+      <!-- ========================================================================= -->
+      <section id="pane-identity" class="view-pane hidden space-y-6">
+        
+        <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <span class="text-xs font-bold text-purple-700 uppercase tracking-wider">Garantía de Confianza Profesional</span>
+            <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 mt-0.5">Bandeja de Validación de Identidad</h2>
+            <p class="text-xs text-slate-500 mt-1">Revisa y aprueba solicitudes de cuentas corporativas, reclutadores y graduados antes de habilitar funciones críticas.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-bold text-slate-500">Pendientes:</span>
+            <span id="pending-identity-count" class="px-3 py-1 rounded-xl bg-purple-100 text-purple-700 font-extrabold text-xs">3 solicitudes</span>
+          </div>
+        </div>
+
+        <div id="identity-requests-container" class="space-y-4">
+          <!-- Inyectado dinámicamente mediante JavaScript -->
+        </div>
+
+      </section>
+
+      <!-- ========================================================================= -->
+      <!-- PESTAÑA 4: MODERACIÓN DE CONTENIDO & ANTI-SPAM                             -->
+      <!-- ========================================================================= -->
+      <section id="pane-moderation" class="view-pane hidden space-y-6">
+        
+        <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <span class="text-xs font-bold text-red-600 uppercase tracking-wider">Entorno Libre de Spam y Fraude</span>
+            <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 mt-0.5">Cola de Moderación de Denuncias</h2>
+            <p class="text-xs text-slate-500 mt-1">Publicaciones o usuarios con reportes acumulados entran en revisión para garantizar un entorno profesional.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-bold text-slate-500">Cola activa:</span>
+            <span id="pending-moderation-count" class="px-3 py-1 rounded-xl bg-red-100 text-red-700 font-extrabold text-xs">2 casos</span>
+          </div>
+        </div>
+
+        <div id="moderation-reports-container" class="space-y-4">
+          <!-- Inyectado dinámicamente mediante JavaScript -->
+        </div>
+
+      </section>
+
+      <!-- ========================================================================= -->
+      <!-- PESTAÑA 5: EVENTOS, CONTROL DE AFOROS & ESCÁNER QR                        -->
+      <!-- ========================================================================= -->
+      <section id="pane-events-audit" class="view-pane hidden space-y-6">
+        
+        <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <span class="text-xs font-bold text-nexus-cyan uppercase tracking-wider">Control Operativo en Puerta</span>
+            <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 mt-0.5">Auditoría de Eventos & Check-in QR</h2>
+            <p class="text-xs text-slate-500 mt-1">Monitorea el límite de aforos y valida en segundos las entradas de los asistentes mediante escaneo.</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          
+          <!-- Lista de Eventos y Estados de Aforo -->
+          <div class="lg:col-span-7 space-y-4">
+            <h3 class="text-xs font-extrabold text-slate-900 uppercase tracking-wider">Estado de Aforos en Vivo</h3>
+            
+            <div id="events-audit-list" class="space-y-4">
+              <!-- Renderizado dinámicamente por JS -->
+            </div>
+          </div>
+
+          <!-- Módulo Interactivo de Validación / Simulador de Escáner QR en Puerta -->
+          <div class="lg:col-span-5 bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+                <h3 class="text-xs font-extrabold text-slate-900 uppercase tracking-wider flex items-center gap-2">
+                  <i class="fas fa-camera text-nexus-blue"></i> Simulador de Validador QR
+                </h3>
+                <span class="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">Lector Activo</span>
+              </div>
+
+              <!-- Ventana simulada de cámara del portero/organizador -->
+              <div class="relative bg-slate-900 rounded-2xl overflow-hidden aspect-video flex flex-col items-center justify-center border-2 border-dashed border-nexus-cyan/60 p-4 text-center">
+                <div class="w-24 h-24 border-2 border-nexus-cyan rounded-xl relative flex items-center justify-center animate-pulse">
+                  <i class="fas fa-qrcode text-3xl text-nexus-cyan/70"></i>
+                  <!-- Línea láser de escaneo -->
+                  <div class="absolute left-0 right-0 h-0.5 bg-nexus-cyan shadow-[0_0_8px_#00D2FF]"></div>
+                </div>
+                <p class="text-[11px] text-slate-300 mt-3 font-medium">Apunta el código QR del boleto del asistente aquí</p>
+              </div>
+
+              <!-- Input de simulación manual o lector de pistola -->
+              <div class="mt-4">
+                <label class="block text-[11px] font-bold text-slate-700 mb-1">Código de Boleto Digital:</label>
+                <div class="flex gap-2">
+                  <input type="text" id="manual-qr-input" value="SMP-2026-9812" placeholder="Ej. SMP-2026-9812" 
+                         class="flex-1 bg-slate-50 border border-slate-200 text-xs px-3 py-2 rounded-xl focus:outline-none focus:border-nexus-blue font-mono font-bold">
+                  <button onclick="simulateQrScan()" class="px-4 py-2 bg-nexus-blue hover:bg-nexus-blueHover text-white text-xs font-bold rounded-xl transition-all shadow-sm">
+                    Validar
+                  </button>
+                </div>
+              </div>
+
+              <!-- Resultado del Escaneo -->
+              <div id="scan-result-card" class="mt-4 p-3.5 rounded-2xl bg-slate-50 border border-slate-200 text-xs space-y-1">
+                <div class="text-[10px] text-slate-400 font-bold uppercase">Estado de la Entrada:</div>
+                <div id="scan-status-text" class="text-slate-600 font-medium">Esperando lectura de código...</div>
+              </div>
+            </div>
+
+            <p class="text-[10px] text-slate-400 mt-4 text-center">Gestión rápida y control de acceso digital sin papeles.</p>
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+  <!-- ==================== MODAL DE VISUALIZACIÓN DE DOCUMENTO ==================== -->
+  <div id="modal-view-doc" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+    <div class="bg-white p-6 rounded-3xl border border-slate-200 max-w-lg w-full relative shadow-2xl">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+        <h3 class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
+          <i class="fas fa-file-shield text-nexus-blue"></i> Auditoría de Evidencia Documental
+        </h3>
+        <button onclick="closeDocModal()" class="text-slate-400 hover:text-slate-700 p-1">
+          <i class="fas fa-times text-base"></i>
+        </button>
+      </div>
+
+      <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 text-xs space-y-2 mb-4">
+        <div class="flex justify-between">
+          <span class="text-slate-500 font-bold">Entidad Solicitante:</span>
+          <span id="doc-modal-entity" class="font-bold text-slate-900">CacaoTech Perú SAC</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-slate-500 font-bold">Tipo de Validación:</span>
+          <span id="doc-modal-type" class="font-bold text-nexus-blue">Ficha RUC & Correo Corporativo</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-slate-500 font-bold">Identificador / RUC:</span>
+          <span id="doc-modal-id" class="font-mono text-slate-800">20608945123</span>
+        </div>
+      </div>
+
+      <!-- Representación visual de documento PDF validado -->
+      <div class="border-2 border-slate-200 rounded-2xl p-6 text-center bg-white space-y-2">
+        <i class="fas fa-file-pdf text-red-500 text-4xl"></i>
+        <div class="text-xs font-bold text-slate-800" id="doc-modal-filename">Constancia_SUNAT_CacaoTech.pdf</div>
+        <p class="text-[11px] text-slate-400">Verificado digitalmente con firma electrónica vigente.</p>
+      </div>
+
+      <div class="mt-5 flex justify-end gap-2">
+        <button onclick="closeDocModal()" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100">
+          Cerrar
+        </button>
+        <button onclick="confirmApprovalFromModal()" class="px-5 py-2 rounded-xl bg-nexus-blue hover:bg-nexus-blueHover text-white text-xs font-bold transition-all shadow-sm">
+          Aprobar Cuenta Ahora
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- ==================== JAVASCRIPT: LÓGICA DE CONTROL ADMINISTRATIVO ==================== -->
+  <script>
+    /* =========================================================================
+       ESTADO CENTRAL ADMINISTRATIVO (STATE)
+       ========================================================================= */
+    const adminState = {
+      activeTab: 'kpis',
+      selectedDocId: null,
+      identityRequests: [
+        {
+          id: 'REQ-101',
+          name: 'Elena Ramos (RR.HH.)',
+          company: 'CacaoTech Perú SAC',
+          type: 'Empresa / Reclutador',
+          ruc: '20608945123',
+          email: 'elena.ramos@cacaotech.pe',
+          docName: 'Constancia_SUNAT_RUC_CacaoTech.pdf',
+          status: 'pending'
+        },
+        {
+          id: 'REQ-102',
+          name: 'Carlos Mendoza Silva',
+          company: 'UPN Sede Tarapoto',
+          type: 'Egresado de Ingeniería',
+          ruc: 'DNI: 74892104',
+          email: 'carlos.mendoza@upn.pe',
+          docName: 'Constancia_Egreso_Sistemas_UPN.pdf',
+          status: 'pending'
+        },
+        {
+          id: 'REQ-103',
+          name: 'Arq. Sofía Díaz',
+          company: 'Estudio Díaz Freelance',
+          type: 'Profesional Independiente',
+          ruc: 'RUC 10: 10748911029',
+          email: 'contacto@sofiadiaz.pe',
+          docName: 'Certificado_Habilitacion_CAP.pdf',
+          status: 'pending'
+        }
+      ],
+      moderationReports: [
+        {
+          id: 'MOD-501',
+          author: 'Usuario_Spam_Bot29',
+          reportsCount: 8,
+          reason: 'Oferta laboral engañosa (Red de mercadeo piramidal)',
+          content: '¡Gana $500 dólares diarios trabajando 2 horas desde tu celular en Tarapoto! Ingresa a este enlace externo de Telegram ya...',
+          status: 'under_review'
+        },
+        {
+          id: 'MOD-502',
+          author: 'Inversiones_Rápidas_Selva',
+          reportsCount: 6,
+          reason: 'Spam masivo en comentarios de publicaciones académicas',
+          content: 'Multiplica tus ahorros en criptomonedas sin esfuerzo. Te garantizamos retorno del 300% semanal. Escríbeme al inbox.',
+          status: 'under_review'
+        }
+      ],
+      eventsAudit: [
+        {
+          id: 'EVT-01',
+          title: 'Summit de Innovación & Tech San Martín',
+          date: '15 Nov, 2026',
+          capacityMax: 200,
+          registered: 185,
+          checkedIn: 112,
+          ticketPrefix: 'SMP-2026'
+        },
+        {
+          id: 'EVT-02',
+          title: 'Taller: Marca Personal en Redes Profesionales',
+          date: '20 Nov, 2026',
+          capacityMax: 100,
+          registered: 92,
+          checkedIn: 0,
+          ticketPrefix: 'TLL-2026'
+        },
+        {
+          id: 'EVT-03',
+          title: 'Mesa Redonda: Empleabilidad Joven e IA',
+          date: '02 Dic, 2026',
+          capacityMax: 150,
+          registered: 140,
+          checkedIn: 0,
+          ticketPrefix: 'UPN-2026'
+        }
+      ],
+      validTickets: {
+        'SMP-2026-9812': { user: 'Carlos Mendoza Silva', status: 'Habilitado', event: 'Summit de Innovación 2026' },
+        'SMP-2026-1102': { user: 'Sofía Díaz', status: 'Habilitado', event: 'Summit de Innovación 2026' },
+        'TLL-2026-4431': { user: 'Jorge Alva', status: 'Habilitado', event: 'Taller Marca Personal' }
+      }
+    };
+
+    /* =========================================================================
+       NAVEGACIÓN POR PESTAÑAS ADMINISTRATIVAS
+       ========================================================================= */
+    function switchAdminTab(tabKey) {
+      adminState.activeTab = tabKey;
+
+      // Ocultar todas las secciones
+      document.querySelectorAll('.view-pane').forEach(el => el.classList.add('hidden'));
+
+      // Mostrar seleccionada
+      const target = document.getElementById(`pane-${tabKey}`);
+      if (target) target.classList.remove('hidden');
+
+      // Actualizar botones del Sidebar
+      document.querySelectorAll('.admin-nav-btn').forEach(btn => {
+        btn.classList.remove('bg-nexus-blue', 'text-white', 'shadow-sm');
+        btn.classList.add('text-slate-600');
+      });
+
+      const activeBtn = document.getElementById(`btn-tab-${tabKey}`);
+      if (activeBtn) {
+        activeBtn.classList.add('bg-nexus-blue', 'text-white', 'shadow-sm');
+        activeBtn.classList.remove('text-slate-600');
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    /* =========================================================================
+       RENDERIZADO: BANDEJA DE IDENTIDAD
+       ========================================================================= */
+    function renderIdentityRequests() {
+      const container = document.getElementById('identity-requests-container');
+      const badge = document.getElementById('badge-verif-count');
+      const counter = document.getElementById('pending-identity-count');
+      if (!container) return;
+
+      const pending = adminState.identityRequests.filter(r => r.status === 'pending');
+      if (badge) badge.textContent = pending.length;
+      if (counter) counter.textContent = `${pending.length} solicitudes`;
+
+      if (pending.length === 0) {
+        container.innerHTML = `
+          <div class="bg-white p-8 rounded-3xl border border-slate-200 text-center space-y-2">
+            <i class="fas fa-check-circle text-emerald-500 text-3xl"></i>
+            <h4 class="text-sm font-bold text-slate-800">¡Bandeja al día!</h4>
+            <p class="text-xs text-slate-500">No hay solicitudes de verificación pendientes de revisión.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = pending.map(req => `
+        <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <span class="text-sm font-extrabold text-slate-900">${req.name}</span>
+              <span class="text-[10px] bg-purple-50 text-purple-700 border border-purple-200 font-bold px-2 py-0.5 rounded-full">${req.type}</span>
+            </div>
+            <p class="text-xs font-semibold text-slate-600">${req.company} • <span class="text-slate-500 font-mono">${req.ruc}</span></p>
+            <p class="text-[11px] text-slate-400 font-medium"><i class="fas fa-envelope text-nexus-blue mr-1"></i> ${req.email}</p>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button onclick="openDocModal('${req.id}')" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all flex items-center gap-1.5">
+              <i class="fas fa-file-pdf text-red-500"></i> Ver Evidencia
+            </button>
+            <button onclick="rejectIdentity('${req.id}')" class="px-3.5 py-2 rounded-xl border border-red-200 hover:bg-red-50 text-red-600 text-xs font-bold transition-all">
+              Rechazar
+            </button>
+            <button onclick="approveIdentity('${req.id}')" class="px-4 py-2 rounded-xl bg-nexus-blue hover:bg-nexus-blueHover text-white text-xs font-bold transition-all shadow-sm flex items-center gap-1.5">
+              <i class="fas fa-check"></i> Aprobar verificación
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function openDocModal(reqId) {
+      const req = adminState.identityRequests.find(r => r.id === reqId);
+      if (!req) return;
+
+      adminState.selectedDocId = reqId;
+      document.getElementById('doc-modal-entity').textContent = `${req.name} (${req.company})`;
+      document.getElementById('doc-modal-type').textContent = req.type;
+      document.getElementById('doc-modal-id').textContent = req.ruc;
+      document.getElementById('doc-modal-filename').textContent = req.docName;
+      document.getElementById('modal-view-doc').classList.remove('hidden');
+    }
+
+    function closeDocModal() {
+      document.getElementById('modal-view-doc').classList.add('hidden');
+    }
+
+    function confirmApprovalFromModal() {
+      if (adminState.selectedDocId) {
+        approveIdentity(adminState.selectedDocId);
+        closeDocModal();
+      }
+    }
+
+    function approveIdentity(reqId) {
+      const req = adminState.identityRequests.find(r => r.id === reqId);
+      if (req) {
+        req.status = 'approved';
+        renderIdentityRequests();
+        showToast(`¡Cuenta de "${req.name}" verificada con insignia oficial!`, 'success');
+      }
+    }
+
+    function rejectIdentity(reqId) {
+      const req = adminState.identityRequests.find(r => r.id === reqId);
+      if (req) {
+        req.status = 'rejected';
+        renderIdentityRequests();
+        showToast(`Solicitud de "${req.name}" denegada por inconsistencia en datos.`, 'info');
+      }
+    }
+
+    /* =========================================================================
+       RENDERIZADO: MODERACIÓN & COLA ANTI-SPAM
+       ========================================================================= */
+    function renderModerationReports() {
+      const container = document.getElementById('moderation-reports-container');
+      const badge = document.getElementById('badge-mod-count');
+      const counter = document.getElementById('pending-moderation-count');
+      if (!container) return;
+
+      const active = adminState.moderationReports.filter(m => m.status === 'under_review');
+      if (badge) badge.textContent = active.length;
+      if (counter) counter.textContent = `${active.length} casos`;
+
+      if (active.length === 0) {
+        container.innerHTML = `
+          <div class="bg-white p-8 rounded-3xl border border-slate-200 text-center space-y-2">
+            <i class="fas fa-shield-heart text-emerald-500 text-3xl"></i>
+            <h4 class="text-sm font-bold text-slate-800">Plataforma Segura y Limpia</h4>
+            <p class="text-xs text-slate-500">No hay publicaciones reportadas pendientes de moderación.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = active.map(item => `
+        <div class="bg-white p-5 rounded-3xl border border-red-200/80 shadow-sm space-y-3.5">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-extrabold text-slate-900">${item.author}</span>
+                <span class="px-2 py-0.5 rounded-full bg-red-100 text-red-700 text-[10px] font-extrabold">
+                  <i class="fas fa-triangle-exclamation mr-1"></i> ${item.reportsCount} Reportes de usuarios
+                </span>
+              </div>
+              <p class="text-xs text-red-600 font-bold mt-1">Motivo: ${item.reason}</p>
+            </div>
+            <span class="text-[10px] bg-slate-100 text-slate-600 font-mono font-bold px-2 py-1 rounded">ID: ${item.id}</span>
+          </div>
+
+          <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 text-xs text-slate-700 italic leading-relaxed">
+            "${item.content}"
+          </div>
+
+          <div class="pt-2 border-t border-slate-100 flex flex-wrap items-center justify-end gap-2">
+            <button onclick="dismissReport('${item.id}')" class="px-3.5 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 transition-colors">
+              Descartar Reporte (Falso Positivo)
+            </button>
+            <button onclick="hideContent('${item.id}')" class="px-3.5 py-2 rounded-xl border border-amber-300 bg-amber-50 text-amber-800 hover:bg-amber-100 text-xs font-bold transition-colors">
+              Ocultar Publicación
+            </button>
+            <button onclick="suspendUser('${item.id}', '${item.author}')" class="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold transition-all shadow-sm">
+              Suspender Cuenta Definitivamente
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function dismissReport(modId) {
+      const item = adminState.moderationReports.find(m => m.id === modId);
+      if (item) {
+        item.status = 'dismissed';
+        renderModerationReports();
+        showToast('Reporte descartado. El contenido vuelve a ser visible en el feed.', 'info');
+      }
+    }
+
+    function hideContent(modId) {
+      const item = adminState.moderationReports.find(m => m.id === modId);
+      if (item) {
+        item.status = 'hidden';
+        renderModerationReports();
+        showToast('Publicación eliminada del muro de la red social.', 'info');
+      }
+    }
+
+    function suspendUser(modId, username) {
+      const item = adminState.moderationReports.find(m => m.id === modId);
+      if (item) {
+        item.status = 'suspended';
+        renderModerationReports();
+        showToast(`La cuenta "${username}" ha sido bloqueada por reincidencia.`, 'success');
+      }
+    }
+
+    /* =========================================================================
+       RENDERIZADO: AUDITORÍA DE EVENTOS & ESCÁNER QR EN PUERTA
+       ========================================================================= */
+    function renderEventsAudit() {
+      const container = document.getElementById('events-audit-list');
+      if (!container) return;
+
+      container.innerHTML = adminState.eventsAudit.map(evt => {
+        const pct = Math.round((evt.registered / evt.capacityMax) * 100);
+        const isFull = pct >= 100;
+
+        return `
+          <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-3">
+            <div class="flex items-start justify-between">
+              <div>
+                <h4 class="text-xs font-extrabold text-slate-900">${evt.title}</h4>
+                <p class="text-[11px] text-slate-500"><i class="far fa-calendar mr-1"></i> ${evt.date}</p>
+              </div>
+              <span class="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full ${isFull ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-nexus-blue'}">
+                ${isFull ? 'Aforo Completo' : `${pct}% Ocupado`}
+              </span>
+            </div>
+
+            <div class="w-full bg-slate-100 rounded-full h-2.5">
+              <div class="bg-nexus-blue h-2.5 rounded-full transition-all" style="width: ${pct}%"></div>
+            </div>
+
+            <div class="flex items-center justify-between text-xs text-slate-600 font-semibold pt-1">
+              <span>Registrados: <strong>${evt.registered} / ${evt.capacityMax}</strong></span>
+              <span class="text-emerald-600"><i class="fas fa-check-double mr-1"></i> Check-in en puerta: <strong>${evt.checkedIn}</strong></span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function simulateQrScan() {
+      const codeInput = document.getElementById('manual-qr-input');
+      const resultCard = document.getElementById('scan-result-card');
+      const statusText = document.getElementById('scan-status-text');
+      const code = codeInput.value.trim().toUpperCase();
+
+      if (!code) return;
+
+      if (adminState.validTickets[code]) {
+        const ticket = adminState.validTickets[code];
+        resultCard.className = "mt-4 p-3.5 rounded-2xl bg-emerald-50 border border-emerald-300 text-xs space-y-1";
+        statusText.innerHTML = `
+          <div class="flex items-center gap-1.5 text-emerald-800 font-extrabold text-sm">
+            <i class="fas fa-circle-check text-emerald-600"></i> ACCESO AUTORIZADO
+          </div>
+          <div class="text-emerald-950 font-bold">Asistente: ${ticket.user}</div>
+          <div class="text-[11px] text-emerald-700">Evento: ${ticket.event}</div>
+          <div class="text-[10px] text-emerald-600 font-mono">Boleto marcado como "Ingresado" a las 11:45 AM</div>
+        `;
+        showToast(`¡Check-in completado para ${ticket.user}!`, 'success');
+
+        // Incrementar métrica
+        adminState.eventsAudit[0].checkedIn++;
+        renderEventsAudit();
+      } else {
+        resultCard.className = "mt-4 p-3.5 rounded-2xl bg-red-50 border border-red-300 text-xs space-y-1";
+        statusText.innerHTML = `
+          <div class="flex items-center gap-1.5 text-red-700 font-extrabold text-sm">
+            <i class="fas fa-circle-xmark text-red-600"></i> CÓDIGO NO VÁLIDO O YA USADO
+          </div>
+          <div class="text-[11px] text-red-600">El boleto ${code} no existe en la base de datos de pases emitidos.</div>
+        `;
+        showToast('Boleto inválido o adulterado.', 'info');
+      }
+    }
+
+    function exportBiReport() {
+      showToast('Generando reporte BI en formato Excel/CSV...', 'info');
+      setTimeout(() => {
+        showToast('Descarga completada: reporte_demanda_laboral_san_martin.xlsx', 'success');
+      }, 1000);
+    }
+
+    /* =========================================================================
+       ACCESIBILIDAD UNIVERSAL & TOASTS (WCAG 2.1 AA)
+       ========================================================================= */
+    function changeFontSize(size) {
+      const body = document.getElementById('app-body');
+      if (size === 'small') body.style.fontSize = '12.5px';
+      if (size === 'normal') body.style.fontSize = '14px';
+      if (size === 'large') body.style.fontSize = '16px';
+      showToast(`Tamaño de lectura ajustado a: ${size.toUpperCase()}`, 'info');
+    }
+
+    function toggleHighContrast() {
+      document.body.classList.toggle('high-contrast');
+      const isHc = document.body.classList.contains('high-contrast');
+      showToast(isHc ? 'Modo de Alto Contraste ACTIVADO' : 'Contraste estándar', 'info');
+    }
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      
+      const borderColor = type === 'success' ? 'border-emerald-500' : 'border-nexus-blue';
+      const icon = type === 'success' ? 'fa-check-circle text-emerald-500' : 'fa-info-circle text-nexus-blue';
+
+      toast.className = `px-4 py-3 rounded-2xl border ${borderColor} bg-white text-xs text-slate-800 flex items-center gap-3 shadow-2xl pointer-events-auto transition-all duration-300 font-semibold`;
+      toast.innerHTML = `<i class="fas ${icon} text-base shrink-0"></i><span>${message}</span>`;
+
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(10px)';
+        setTimeout(() => toast.remove(), 300);
+      }, 3200);
+    }
+
+    /* INICIALIZACIÓN */
+    window.addEventListener('DOMContentLoaded', () => {
+      renderIdentityRequests();
+      renderModerationReports();
+      renderEventsAudit();
+    });
+  </script>
+</body>
+</html>
